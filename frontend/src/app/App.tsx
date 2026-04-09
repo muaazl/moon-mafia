@@ -2,7 +2,7 @@ import { RouterProvider } from 'react-router';
 import { router } from './routes';
 import { Toaster } from './components/ui/sonner';
 import { ThemeProvider } from './components/ThemeProvider';
-import { useEffect, useRef, useMemo, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { MotionConfig } from 'framer-motion';
 import { FullScreenButton } from '../components/FullScreenButton';
 import { playSound, playHaptic } from '../lib/audio';
@@ -170,10 +170,6 @@ function GlobalAudioHaptics() {
 
 function PerformanceWrapper({ children }: { children: React.ReactNode }) {
   const { highQuality } = useSettingsStore();
-  const motionConfig = useMemo(() => ({
-    reducedMotion: highQuality ? "user" : "always" as const
-  }), [highQuality]);
-
   return (
     <MotionConfig transition={highQuality ? undefined : { duration: 0 }}>
       <div className={highQuality ? "" : "perf-mode"}>
