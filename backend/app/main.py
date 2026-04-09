@@ -24,7 +24,7 @@ app = FastAPI(title="Moon Mafia API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["http://localhost:5173", "https://moon-mafia.vercel.app/"],
     allow_credentials=True,  # ASSESSMENT: Virtual Identity — credentials required for cookie auth.
     allow_methods=["*"],
     allow_headers=["*"],

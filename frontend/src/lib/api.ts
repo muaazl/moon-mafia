@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: 'https://moon-mafia-backend.vercel.app',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',

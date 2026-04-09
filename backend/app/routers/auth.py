@@ -133,7 +133,8 @@ def login(body: LoginRequest, response: Response, db: Session = Depends(get_db))
         key="session_token",
         value=token,
         httponly=True,
-        samesite="lax",
+        samesite="none",
+        secure=True,
         max_age=TOKEN_EXPIRE_MINUTES * 60,
     )
     return user
@@ -148,7 +149,7 @@ def me(user: User = Depends(get_current_user)):
 @router.post("/logout")
 def logout(response: Response):
     """Clear the session cookie."""
-    response.delete_cookie(key="session_token")
+    response.delete_cookie(key="session_token", samesite="none", secure=True)
     return {"status": "logged out"}
 
 
@@ -236,7 +237,7 @@ def delete_account(
     """
     db.delete(user)
     db.commit()
-    response.delete_cookie(key="session_token")
+    response.delete_cookie(key="session_token", samesite="none", secure=True)
     return {"status": "account deleted"}
     
 _QUOTES_CACHE: list[dict] = []
