@@ -9,18 +9,18 @@ import PasswordInput from "../components/ui/password-input";
 import { Button } from "../components/ui/button";
 import { Label } from "../components/ui/label";
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
-import { AnimatedBackground } from "../components/AnimatedBackground";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_ROUTES } from "../../lib/constants";
 
 const TIPS = [
   { label: "PRO TIP", value: "Hype when hearts dominate the feed. Purge when carrots take over." },
-  { label: "STRATEGY", value: "Use BET when you're confident — bigger risk, bigger reward." },
+  { label: "STRATEGY", value: "Use BET when you're confident — high risk, high reward." },
   { label: "MINI GAMES", value: "Run mini-games between rounds to stack extra cash before re-entering." },
   { label: "HINT", value: "Reveal Hint briefly shows the image — useful when the feed fades too fast." },
   { label: "STREAK", value: "Win multiple rounds in a row to build a streak. Streaks multiply payouts." },
-  { label: "HARD MODE", value: "Hard difficulty fades the image in 2 seconds. Choose your settings wisely." },
+  { label: "HARD MODE", value: "Hard difficulty fades the image in a split second. Choose your settings wisely." },
   { label: "LOAN", value: "Mini-game loans are a lifeline — but remember to pay them back double." },
+  { label: "SOCIAL", value: "Feeling generous? You can tip your fellow players directly from the leaderboard." },
 ];
 
 function LeftPanel() {
@@ -55,9 +55,17 @@ function LeftPanel() {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="inline-block px-4 py-1.5 bg-emerald-500/10 rounded-full border border-emerald-500/20 mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-          <span className="text-xs font-bold text-emerald-400">Welcome</span>
+          <span className="text-xs font-bold text-emerald-400">
+            {(() => {
+              const hour = new Date().getHours();
+              if (hour < 12) return "Good morning";
+              if (hour < 17) return "Good afternoon";
+              if (hour < 21) return "Good evening";
+              return "Good night";
+            })()}
+          </span>
         </div>
-        <h1 className="text-6xl xl:text-8xl font-black text-foreground tracking-tighter glow-emerald mb-4">
+        <h1 className="text-6xl xl:text-7xl font-black text-foreground tracking-tighter glow-emerald mb-4">
           Moon Mafia
         </h1>
         <p className="mt-4 text-lg text-muted-foreground max-w-md leading-relaxed font-medium">
@@ -241,7 +249,7 @@ export function LoginScreen() {
 
   return (
     <div className="min-h-screen w-full flex relative overflow-hidden">
-      <AnimatedBackground />
+
 
       <LeftPanel />
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useTheme } from "next-themes";
 import { SwitchBasic } from "../components/ui/switch-basic";
-import { AnimatedBackground } from "../components/AnimatedBackground";
+
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import { ArrowLeftIcon, User as UserIcon, ShieldCheck, Trash2, Save, X, Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "../../store/useAuthStore";
@@ -157,7 +157,7 @@ export function SettingsScreen() {
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 p-4 md:p-6 overflow-x-hidden transition-colors duration-500">
-      <AnimatedBackground />
+
 
       {/* Top Bar */}
       <motion.div

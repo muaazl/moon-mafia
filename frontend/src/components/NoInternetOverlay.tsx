@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { WifiOff, RefreshCw } from "lucide-react";
-import { AnimatedBackground } from "../app/components/AnimatedBackground";
+
 
 export function NoInternetOverlay() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
@@ -47,7 +47,7 @@ export function NoInternetOverlay() {
 
           {/* Animated background particles — consistent with other screens */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <AnimatedBackground />
+
           </div>
 
           {/* Card */}

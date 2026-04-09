@@ -4,7 +4,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { toast } from "sonner";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { AnimatedBackground } from "../components/AnimatedBackground";
+
 import { api } from "../../lib/api";
 import { MiniResponse } from "../../lib/types";
 import { useAuthStore } from "../../store/useAuthStore";
@@ -27,6 +27,7 @@ import {
   DrawerClose,
 } from "../components/ui/drawer";
 import { playSound, playHaptic } from "../../lib/audio";
+import { fireJackpotConfetti, fireWinConfetti } from "../../lib/confetti";
 
 type MiniGameId = "gamble" | "beg" | "search" | "fish" | "hunt" | "loan";
 
@@ -160,6 +161,13 @@ export function MiniGameScreen() {
       if (outcomeType === "win") {
         playSound("miniwin");
         playHaptic("medium");
+
+        // Confetti for significant wins or specific trophies
+        if (data.outcome === "TROPHY") {
+          fireJackpotConfetti();
+        } else if (earned > 100) {
+          fireWinConfetti();
+        }
       } else if (outcomeType === "loss") {
         playSound("minilose");
         playHaptic("heavy");
@@ -211,7 +219,7 @@ export function MiniGameScreen() {
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 p-4 md:p-8 overflow-x-hidden transition-colors duration-500">
-      <AnimatedBackground />
+
 
       {/* Top Bar */}
       <motion.div

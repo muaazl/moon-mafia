@@ -37,6 +37,7 @@ export const API_ROUTES = {
     AUDIT: "/game/audit",
     FORFEIT: "/game/forfeit",
     LEADERBOARD: "/game/leaderboard",
+    TIP: "/game/tip",
   },
   MINI: {
     PLAY: (gameId: string) => `/mini/${gameId}`,

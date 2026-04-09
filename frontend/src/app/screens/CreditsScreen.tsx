@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { AnimatedBackground } from "../components/AnimatedBackground";
+
 import { motion } from "framer-motion";
 import { ArrowLeftIcon } from "lucide-react";
 
@@ -8,7 +8,7 @@ export function CreditsScreen() {
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 p-4 md:p-8 overflow-hidden transition-colors duration-500">
-      <AnimatedBackground />
+
 
       {/* Top Bar */}
       <motion.div

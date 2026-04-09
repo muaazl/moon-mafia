@@ -56,6 +56,16 @@ class ActionResponse(BaseModel):
     streak: int = 0
 
 
+class TipRequest(BaseModel):
+    recipient_name: str
+    amount: float
+
+
+class TipResponse(BaseModel):
+    sender_capital: float
+    detail: str
+
+
 class AuditResponse(BaseModel):
     audit_cost: int
     capital: Optional[float] = None
@@ -177,9 +187,9 @@ def perform_action(
     if outcome in ("WIN", "HIT", "JACKPOT", "DODGE", "TROPHY", "CATCH", "BIG_WIN", "FOUND", "RECEIVED"):
         user.total_wins = (user.total_wins or 0) + 1
         user.current_streak = (user.current_streak or 0) + 1
-        if "heart" in mode:
+        if body.action == ActionType.HYPE:
             user.heart_mode_wins = (user.heart_mode_wins or 0) + 1
-        elif "carrot" in mode:
+        elif body.action == ActionType.PURGE:
             user.carrot_mode_wins = (user.carrot_mode_wins or 0) + 1
             
         if user.current_streak >= 6:
@@ -318,6 +328,45 @@ class LeaderboardEntry(BaseModel):
     name: str
     avatar_url: Optional[str] = None
     capital: float
+
+@router.post("/tip", response_model=TipResponse)
+def tip_player(
+    body: TipRequest,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Allow a player to tip another player from the leaderboard.
+    Validation:
+    - Amount must be > 0
+    - Sender must have enough capital
+    - Recipient must exist
+    - Cannot tip yourself
+    """
+    if body.amount <= 0:
+        raise HTTPException(status_code=400, detail="Tip amount must be positive")
+
+    if user.capital < body.amount:
+        raise HTTPException(status_code=400, detail="Insufficient funds for this tip")
+
+    recipient = db.query(User).filter(User.name == body.recipient_name).first()
+    if not recipient:
+        raise HTTPException(status_code=404, detail="Recipient player not found")
+
+    if recipient.id == user.id:
+        raise HTTPException(status_code=400, detail="You cannot tip yourself")
+
+    user.capital = round(user.capital - body.amount, 2)
+    recipient.capital = round(recipient.capital + body.amount, 2)
+
+    db.commit()
+    db.refresh(user)
+    db.refresh(recipient)
+
+    return TipResponse(
+        sender_capital=user.capital,
+        detail=f"Successfully sent ${body.amount} to {body.recipient_name}."
+    )
 
 @router.get("/leaderboard", response_model=list[LeaderboardEntry])
 def get_leaderboard(db: Session = Depends(get_db)):

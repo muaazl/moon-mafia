@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 
-import { AnimatedBackground } from "../components/AnimatedBackground";
+
 import { motion, Variants } from "framer-motion";
 import { ArrowLeftIcon } from "lucide-react";
 
@@ -41,7 +41,7 @@ export function HowToPlayScreen() {
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 p-4 md:p-8 overflow-x-hidden transition-colors duration-500">
-      <AnimatedBackground />
+
 
       {/* Top Bar */}
       <motion.div

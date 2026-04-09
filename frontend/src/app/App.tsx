@@ -2,11 +2,15 @@ import { RouterProvider } from 'react-router';
 import { router } from './routes';
 import { Toaster } from './components/ui/sonner';
 import { ThemeProvider } from './components/ThemeProvider';
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import { MotionConfig } from 'framer-motion';
+import { FullScreenButton } from '../components/FullScreenButton';
 import { playSound, playHaptic } from '../lib/audio';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { NoInternetOverlay } from '../components/NoInternetOverlay';
+import { MobileBlockerOverlay } from '../components/MobileBlockerOverlay';
+import { FullscreenPromptModal } from '../components/FullscreenPromptModal';
+import { AnimatedBackground } from './components/AnimatedBackground';
 function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { musicEnabled } = useSettingsStore();
@@ -179,15 +183,47 @@ function PerformanceWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+function ZoomPreventer() {
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '-' || e.key === '+' || e.key === '0')) {
+        e.preventDefault();
+      }
+    };
+    
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeydown, { passive: false });
+    document.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      document.removeEventListener('keydown', handleKeydown);
+      document.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
+  return null;
+}
+
 export default function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="carrot" themes={['carrot', 'heart']}>
       <PerformanceWrapper>
+        <ZoomPreventer />
         <BackgroundMusic />
         <GlobalAudioHaptics />
-        <RouterProvider router={router} />
-        <NoInternetOverlay />
-        <Toaster />
+        <AnimatedBackground />
+        <div style={{ minWidth: '1280px', minHeight: '800px', width: '100%', height: '100%' }}>
+          <RouterProvider router={router} />
+          <MobileBlockerOverlay />
+          <FullscreenPromptModal />
+          <NoInternetOverlay />
+          <Toaster />
+          <FullScreenButton />
+        </div>
       </PerformanceWrapper>
     </ThemeProvider>
   );

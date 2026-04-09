@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { useAuthStore } from '../../store/useAuthStore';
-import { AnimatedBackground } from './AnimatedBackground';
+
 import { motion } from 'framer-motion';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
@@ -27,7 +27,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     if (!isInitialized) {
         return (
             <div className="min-h-screen w-full flex flex-col items-center justify-center gap-4 bg-background text-foreground">
-                <AnimatedBackground />
+
                 <div className="z-10 flex gap-3">
                     {[1, 2, 3].map((i) => (
                         <motion.div

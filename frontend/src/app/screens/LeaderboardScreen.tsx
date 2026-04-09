@@ -2,9 +2,22 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { motion, Variants } from "framer-motion";
 import { ArrowLeft, Medal } from "lucide-react";
-import { AnimatedBackground } from "../components/AnimatedBackground";
+
 import { api } from "../../lib/api";
 import { API_ROUTES } from "../../lib/constants";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { toast } from "sonner";
+import { useAuthStore } from "../../store/useAuthStore";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerClose,
+} from "../components/ui/drawer";
 
 type LeaderboardEntry = {
   name: string;
@@ -14,10 +27,17 @@ type LeaderboardEntry = {
 
 export function LeaderboardScreen() {
   const navigate = useNavigate();
+  const { user, refreshUser } = useAuthStore();
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Tipping state
+  const [tipRecipient, setTipRecipient] = useState<LeaderboardEntry | null>(null);
+  const [tipAmount, setTipAmount] = useState<string>("");
+  const [isTipping, setIsTipping] = useState(false);
 
-  useEffect(() => {
+  const fetchLeaderboard = () => {
+    setLoading(true);
     api.get<LeaderboardEntry[]>(API_ROUTES.GAME.LEADERBOARD)
       .then(res => {
         setLeaderboard(res.data);
@@ -28,7 +48,46 @@ export function LeaderboardScreen() {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchLeaderboard();
   }, []);
+
+  const handleTip = async () => {
+    if (!tipRecipient || !tipAmount) return;
+    const amount = parseFloat(tipAmount);
+    
+    if (isNaN(amount) || amount <= 0) {
+      toast.error("Invalid Amount", { description: "Please enter a valid tip amount." });
+      return;
+    }
+
+    if (amount > (user?.capital || 0)) {
+      toast.error("Insufficient Funds", { description: "You cannot tip more than your current capital." });
+      return;
+    }
+
+    setIsTipping(true);
+    try {
+      const { data } = await api.post(API_ROUTES.GAME.TIP, {
+        recipient_name: tipRecipient.name,
+        amount: amount
+      });
+      
+      toast.success("Tip Sent", { description: data.detail });
+      setTipRecipient(null);
+      setTipAmount("");
+      
+      // Update local state and refresh user data
+      await refreshUser();
+      fetchLeaderboard();
+    } catch (error: any) {
+      toast.error("Tip Failed", { description: error.response?.data?.detail || "Something went wrong." });
+    } finally {
+      setIsTipping(false);
+    }
+  };
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -51,7 +110,7 @@ export function LeaderboardScreen() {
 
   return (
     <div className="h-screen w-full flex flex-col relative z-10 overflow-hidden">
-      <AnimatedBackground />
+
 
       {/* Top Bar - Consistent with MiniGame */}
       <motion.div
@@ -91,10 +150,11 @@ export function LeaderboardScreen() {
         {/* Content */}
         <motion.div variants={itemVariants} className="w-full relative flex-1 min-h-0 flex flex-col">
           <div className="flex-1 flex flex-col rounded-3xl border border-white/[0.06] bg-black/40 overflow-hidden shadow-2xl relative">
-            <div className="grid grid-cols-[3rem_minmax(0,1fr)_10rem] gap-4 p-4 border-b border-white/[0.06] bg-black/60 items-center text-xs font-bold text-muted-foreground flex-shrink-0">
+            <div className="grid grid-cols-[3rem_minmax(0,1fr)_8rem_6rem] gap-4 p-4 border-b border-white/[0.06] bg-black/60 items-center text-xs font-bold text-muted-foreground flex-shrink-0">
               <div className="text-center">Rank</div>
               <div>Player</div>
-              <div className="text-right pr-4">Funds</div>
+              <div className="text-right">Funds</div>
+              <div className="text-center">Action</div>
             </div>
 
             <div className="flex-1 overflow-y-auto w-full no-scrollbar select-none focus:outline-none">
@@ -112,7 +172,7 @@ export function LeaderboardScreen() {
                     <motion.div
                       variants={itemVariants}
                       key={idx}
-                      className={`grid grid-cols-[3rem_minmax(0,1fr)_10rem] gap-4 p-5 items-center border-b border-white/[0.02] last:border-0 hover:bg-white/[0.02] transition-colors ${idx < 3 ? 'bg-emerald-500/[0.02]' : ''}`}
+                      className={`grid grid-cols-[3rem_minmax(0,1fr)_8rem_6rem] gap-4 p-5 items-center border-b border-white/[0.02] last:border-0 hover:bg-white/[0.02] transition-colors ${idx < 3 ? 'bg-emerald-500/[0.02]' : ''}`}
                     >
                       <div className="text-center font-bold text-lg text-muted-foreground relative flex justify-center">
                         {idx === 0 && <Medal className="w-6 h-6 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" />}
@@ -130,14 +190,26 @@ export function LeaderboardScreen() {
                           )}
                         </div>
                         <span className={`font-black truncate tracking-tight ${idx < 3 ? 'text-emerald-400 glow-emerald' : 'text-foreground'}`}>
-                          {entry.name}
+                          {entry.name} {entry.name === user?.name && "(You)"}
                         </span>
                       </div>
 
-                      <div className="text-right pr-4">
+                      <div className="text-right">
                         <span className={`text-sm md:text-base font-black truncate tracking-tight ${entry.capital < 0 ? 'text-red-400' : 'text-foreground'}`}>
                           {entry.capital < 0 ? '-' : ''}${Math.abs(entry.capital).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                         </span>
+                      </div>
+
+                      <div className="flex justify-center">
+                        {entry.name !== user?.name && (
+                          <Button 
+                            onClick={() => setTipRecipient(entry)}
+                            variant="ghost" 
+                            className="h-8 px-3 text-[10px] font-black tracking-widest uppercase bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20"
+                          >
+                            Tip
+                          </Button>
+                        )}
                       </div>
                     </motion.div>
                   ))}
@@ -147,6 +219,71 @@ export function LeaderboardScreen() {
           </div>
         </motion.div>
       </motion.div>
+
+      <Drawer
+        open={tipRecipient !== null}
+        onOpenChange={(open) => {
+          if (!open) setTipRecipient(null);
+        }}
+      >
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Tip {tipRecipient?.name}</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
+            <div className="space-y-6">
+              <div className="rounded-xl border border-white/[0.06] bg-black/40 p-6 text-center">
+                <p className="text-xs font-black tracking-widest text-muted-foreground uppercase mb-2">Your Available Funds</p>
+                <p className="text-3xl font-black text-emerald-400 glow-emerald">
+                  ${(user?.capital || 0).toLocaleString()}
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="relative group">
+                  <Input
+                    type="text"
+                    placeholder="Enter tip amount"
+                    value={tipAmount}
+                    onChange={(e) => setTipAmount(e.target.value)}
+                    className="h-16 text-center text-2xl font-black bg-black/40 border-white/[0.06]"
+                    disabled={isTipping}
+                    autoFocus
+                  />
+                </div>
+
+                <div className="grid grid-cols-4 gap-2">
+                  {[10, 50, 100, 500].map((val) => (
+                    <Button
+                      key={val}
+                      variant="outline"
+                      className="h-12 font-black text-xs tracking-widest bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.05]"
+                      onClick={() => setTipAmount(val.toString())}
+                      disabled={isTipping}
+                    >
+                      ${val}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </DrawerBody>
+          <DrawerFooter className="grid grid-cols-2 gap-3 pb-8">
+            <DrawerClose asChild>
+              <Button variant="outline" className="w-full h-14 font-black tracking-widest uppercase text-xs" disabled={isTipping}>
+                Cancel
+              </Button>
+            </DrawerClose>
+            <Button 
+              className="w-full h-14 bg-emerald-600 text-white hover:bg-emerald-500 font-black tracking-widest uppercase text-xs shadow-lg shadow-emerald-500/20" 
+              onClick={handleTip} 
+              disabled={isTipping || !tipAmount}
+            >
+              {isTipping ? "Sending..." : "Confirm Tip"}
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

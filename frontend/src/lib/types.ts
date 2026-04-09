@@ -58,3 +58,8 @@ export interface SummaryResponse {
     carrot_mode_wins: number;
   avatar_url?: string;
 }
+
+export interface TipResponse {
+    sender_capital: number;
+    detail: string;
+}

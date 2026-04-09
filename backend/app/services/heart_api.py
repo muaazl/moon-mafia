@@ -1,9 +1,9 @@
 # ASSESSMENT: Interoperability — External API calls isolated in service modules.
 import httpx
+import random
 
 HEART_API_URL = "http://marcconrad.com/uob/heart/api.php?out=json"
 NO_API_URL = "https://naas.isalman.dev/no"
-
 DIFFICULTY_SECONDS = {
     "easy": 5,
     "medium": 2,

@@ -5,7 +5,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { HUDCard } from "../components/HUDCard";
 import { toast } from "sonner";
-import { AnimatedBackground } from "../components/AnimatedBackground";
+
 import { useAuthStore } from "../../store/useAuthStore";
 import { api } from "../../lib/api";
 import { FetchResponse, ActionResponse, AuditResponse } from "../../lib/types";
@@ -30,6 +30,7 @@ import {
 import { PriceChart } from "../components/PriceChart";
 import { playSound, playHaptic } from "../../lib/audio";
 import { useSettingsStore } from "../../store/useSettingsStore";
+import { fireJackpotConfetti, fireWinConfetti, fireStreakConfetti } from "../../lib/confetti";
 
 const copyToClipboard = (value: number) => {
   navigator.clipboard.writeText(value.toString()).then(() => {
@@ -266,8 +267,21 @@ export function MainGameScreen() {
 
       if (isGameOver) {
         playSound("gameover");
+        if (isWin) fireWinConfetti();
         setTimeout(() => setShowGameOverModal(true), 1000);
       } else {
+        // Trigger confetti for high-value wins or jackpots
+        if (data.outcome === "JACKPOT") {
+          fireJackpotConfetti();
+        } else if (gainLoss > activeStake * 1.5) {
+          fireWinConfetti();
+        }
+
+        // Streak thresholds
+        if (data.streak === 5 || data.streak === 10 || data.streak === 20) {
+          fireStreakConfetti();
+        }
+
         setRound((r) => r + 1);
         fetchGame(round + 1);
       }
@@ -349,7 +363,7 @@ export function MainGameScreen() {
 
   return (
     <div className="min-h-screen w-full bg-background flex flex-col transition-colors duration-500 relative overflow-hidden">
-      <AnimatedBackground />
+
 
       <div className="bg-card/60 backdrop-blur-xl border-b border-border px-10 py-6 z-20 shadow-sm relative">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-10">
