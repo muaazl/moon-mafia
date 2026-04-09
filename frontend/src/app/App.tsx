@@ -1,0 +1,194 @@
+import { RouterProvider } from 'react-router';
+import { router } from './routes';
+import { Toaster } from './components/ui/sonner';
+import { ThemeProvider } from './components/ThemeProvider';
+import { useEffect, useRef, useMemo } from 'react';
+import { MotionConfig } from 'framer-motion';
+import { playSound, playHaptic } from '../lib/audio';
+import { useSettingsStore } from '../store/useSettingsStore';
+import { NoInternetOverlay } from '../components/NoInternetOverlay';
+function BackgroundMusic() {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { musicEnabled } = useSettingsStore();
+  const pendingPlay = useRef(true);
+  const fadeIntervalRef = useRef<any>(null);
+  const FADE_DURATION = 10000; // 10 seconds fade as requested
+  const TARGET_VOLUME = 0.5;
+
+  const fade = (targetVolume: number, duration: number, onComplete?: () => void) => {
+    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+    
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const startVolume = audio.volume;
+    const steps = 50;
+    const stepTime = duration / steps;
+    const volumeStep = (targetVolume - startVolume) / steps;
+    let currentStep = 0;
+
+    fadeIntervalRef.current = setInterval(() => {
+      currentStep++;
+      const newVolume = Math.max(0, Math.min(TARGET_VOLUME, startVolume + (volumeStep * currentStep)));
+      audio.volume = newVolume;
+
+      if (currentStep >= steps) {
+        if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+        fadeIntervalRef.current = null;
+        if (onComplete) onComplete();
+      }
+    }, stepTime);
+  };
+
+  const startTrack = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    audio.currentTime = 0;
+    audio.volume = 0;
+    try {
+      await audio.play();
+      fade(TARGET_VOLUME, FADE_DURATION);
+    } catch {
+      pendingPlay.current = true;
+    }
+  };
+
+  useEffect(() => {
+    const audio = new Audio('/music/bg.wav');
+    audio.loop = false; // Manual loop for fades
+    audio.volume = 0;
+    audioRef.current = audio;
+
+    const handleEnded = () => {
+      // Small delay before restarting
+      setTimeout(() => {
+        if (useSettingsStore.getState().musicEnabled) {
+          startTrack();
+        }
+      }, 2000);
+    };
+
+    audio.addEventListener('ended', handleEnded);
+
+    // Monitoring track progress to start fade out
+    // If we want to fade out BEFORE it ends, we check currentTime
+    const interval = setInterval(() => {
+      if (audio.duration && audio.currentTime > audio.duration - (FADE_DURATION / 1000)) {
+        // Trigger fade out if not already fading
+        if (!fadeIntervalRef.current && audio.volume === TARGET_VOLUME) {
+          fade(0, FADE_DURATION);
+        }
+      }
+    }, 1000);
+
+    const handleInteraction = () => {
+      if (pendingPlay.current && useSettingsStore.getState().musicEnabled) {
+        pendingPlay.current = false;
+        startTrack();
+      }
+    };
+
+    window.addEventListener('click', handleInteraction, { once: true });
+    window.addEventListener('keydown', handleInteraction, { once: true });
+    window.addEventListener('touchstart', handleInteraction, { once: true });
+
+    if (useSettingsStore.getState().musicEnabled) {
+      startTrack();
+    }
+
+    return () => {
+      clearInterval(interval);
+      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+      audio.pause();
+      audio.src = '';
+      audio.removeEventListener('ended', handleEnded);
+      window.removeEventListener('click', handleInteraction);
+      window.removeEventListener('keydown', handleInteraction);
+      window.removeEventListener('touchstart', handleInteraction);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    if (musicEnabled) {
+      if (audio.paused) startTrack();
+    } else {
+      fade(0, 2000, () => {
+        audio.pause();
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [musicEnabled]);
+
+  return null;
+}
+
+function GlobalAudioHaptics() {
+  const lastHoveredRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('button') || target.closest('a') || target.closest('[role="button"]')) {
+        playSound('click');
+        playHaptic('light');
+      }
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest('button, a, [role="button"]') as HTMLElement;
+      
+      if (target) {
+        if (lastHoveredRef.current !== target) {
+          playSound('hover');
+          lastHoveredRef.current = target;
+        }
+      } else {
+        lastHoveredRef.current = null;
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    document.addEventListener('mouseover', handleMouseOver);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      document.removeEventListener('mouseover', handleMouseOver);
+    };
+  }, []);
+
+  return null;
+}
+
+function PerformanceWrapper({ children }: { children: React.ReactNode }) {
+  const { highQuality } = useSettingsStore();
+  const motionConfig = useMemo(() => ({
+    reducedMotion: highQuality ? "user" : "always" as const
+  }), [highQuality]);
+
+  return (
+    <MotionConfig transition={highQuality ? undefined : { duration: 0 }}>
+      <div className={highQuality ? "" : "perf-mode"}>
+        {children}
+      </div>
+    </MotionConfig>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="carrot" themes={['carrot', 'heart']}>
+      <PerformanceWrapper>
+        <BackgroundMusic />
+        <GlobalAudioHaptics />
+        <RouterProvider router={router} />
+        <NoInternetOverlay />
+        <Toaster />
+      </PerformanceWrapper>
+    </ThemeProvider>
+  );
+}

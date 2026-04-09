@@ -1,0 +1,56 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .glow-emerald {
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  }
+  
+  .glow-red {
+    text-shadow: 0 0 10px rgba(248, 113, 113, 0.5);
+  }
+
+  .perf-mode .backdrop-blur-xl,
+  .perf-mode .backdrop-blur-md,
+  .perf-mode .backdrop-blur-sm,
+  .perf-mode .backdrop-blur-2xl {
+    backdrop-filter: none !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+  }
+
+  .heart .perf-mode .backdrop-blur-xl,
+  .heart .perf-mode .backdrop-blur-md,
+  .heart .perf-mode .backdrop-blur-sm,
+  .heart .perf-mode .backdrop-blur-2xl {
+    background-color: rgba(20, 0, 0, 0.9) !important;
+  }
+
+  .perf-mode .glow-emerald,
+  .perf-mode .glow-red {
+    text-shadow: none !important;
+  }
+
+  .perf-mode * {
+    transition-property: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+
+  .perf-mode .game-fade-img {
+    transition-property: opacity !important;
+  }
+
+  .perf-mode .bg-\[radial-gradient\(circle_at_center\,transparent_0\%\,var\(--background\)_100\%\)\] {
+    background: var(--background) !important;
+    opacity: 1 !important;
+  }
+}
