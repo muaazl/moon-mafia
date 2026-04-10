@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import engine, Base
+from app.database import engine, Base, fix_postgres_sequences
 from app.routers import auth, game, mini
 from app.services import heart_api
 
@@ -12,6 +12,9 @@ Base.metadata.create_all(bind=engine)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Fix sequences for PostgreSQL if needed
+    fix_postgres_sequences()
+    
     # Startup: Initialize the global HTTP client
     heart_api.init_http_client()
     yield
