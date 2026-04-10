@@ -46,7 +46,6 @@ const copyToClipboard = (value: number) => {
   });
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
 export function MiniGameScreen() {
   const navigate = useNavigate();
   const { user, refreshUser } = useAuthStore();
@@ -61,11 +60,9 @@ export function MiniGameScreen() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showBustModal, setShowBustModal] = useState(false);
 
-  // ── Cooldowns & Local State ──────────────────────────────────────────────
   const [cooldowns, setCooldowns] = useState<Record<string, string>>({});
   const [loanBalance, setLoanBalance] = useState<number>(0);
 
-  // Countdown cooldown timers
   useEffect(() => {
     const interval = setInterval(() => {
       setCooldowns((prev) => {
@@ -135,7 +132,6 @@ export function MiniGameScreen() {
         response = await api.post<MiniResponse>(API_ROUTES.MINI.PLAY(selectedGame));
       }
 
-      // Immediately update store so funds display changes right away
       await refreshUser();
 
       const { data } = response;
@@ -147,13 +143,11 @@ export function MiniGameScreen() {
           ? "neutral"
           : "loss";
 
-      // Keep the loading screen up a bit longer to build suspense
       await new Promise((resolve) => setTimeout(resolve, SUSPENSE_DELAY_MS));
 
       setIsRunning(false);
       setOutcome({ type: outcomeType, detail: data.detail, earned });
 
-      // Track loan amount taken
       if (selectedGame === "loan" && outcomeType === "win" && earned > 0) {
         setLoanBalance((prev) => prev + earned);
       }
@@ -162,7 +156,6 @@ export function MiniGameScreen() {
         playSound("miniwin");
         playHaptic("medium");
 
-        // Confetti for significant wins or specific trophies
         if (data.outcome === "TROPHY") {
           fireJackpotConfetti();
         } else if (earned > 100) {
@@ -178,7 +171,6 @@ export function MiniGameScreen() {
     } catch (error: any) {
       setIsRunning(false);
       if (error.response?.status === 429) {
-        // Backend says we must wait
         const detail = error.response.data.detail;
         setCooldowns((prev) => ({ ...prev, [selectedGame]: detail }));
         const msg = UI_MESSAGES.MINI.COOLDOWN(detail);
@@ -219,9 +211,6 @@ export function MiniGameScreen() {
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 p-4 md:p-8 overflow-x-hidden transition-colors duration-500">
-
-
-      {/* Top Bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -237,7 +226,6 @@ export function MiniGameScreen() {
         </button>
 
         <div className="relative flex flex-col items-end text-right min-w-[200px] group">
-          {/* Artistic Avatar Overlay - Half Visible/Half Hidden */}
           {user?.avatar_url && (
             <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full overflow-hidden opacity-20 grayscale pointer-events-none blur-[2px] transition-all duration-700">
               <img src={user.avatar_url} alt="" className="w-full h-full object-cover scale-110" />
@@ -264,8 +252,6 @@ export function MiniGameScreen() {
           </div>
         </div>
       </motion.div>
-
-      {/* Main Content */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -282,7 +268,6 @@ export function MiniGameScreen() {
         </motion.div>
 
         <motion.div variants={itemVariants} className="flex max-w-5xl w-full gap-8">
-          {/* Left: mini-games list */}
           <div className="w-[320px] shrink-0 rounded-3xl border border-border bg-card/80 p-6 shadow-sm">
             <div className="space-y-3">
               {MINI_GAMES.map((game) => {
@@ -312,8 +297,6 @@ export function MiniGameScreen() {
               })}
             </div>
           </div>
-
-          {/* Right: active game panel */}
           <div className="flex flex-1 flex-col rounded-3xl border border-border bg-card/80 px-8 py-8 shadow-sm">
             <div className="mb-6">
               <h2 className="text-2xl font-semibold text-foreground tracking-tight glow-emerald">
@@ -410,7 +393,6 @@ export function MiniGameScreen() {
                           ? `Take a quick loan of $100–$500. You'll owe double back.${loanBalance > 0 ? ` Outstanding loan: $${loanBalance.toLocaleString()}.` : ""}`
                           : "Set your stake and let's see what happens. You could win big or lose it all!"}
                       </p>
-                      {/* Loan balance indicator */}
                       {selectedGame === "loan" && loanBalance > 0 && (
                         <div className="mt-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-center">
                           <p className="text-xs text-amber-400/80 font-black mb-0.5">Outstanding Debt</p>
@@ -518,8 +500,6 @@ export function MiniGameScreen() {
           </div>
         </motion.div>
       </motion.div>
-
-      {/* Repossession Modal */}
       <Dialog open={showBustModal} onOpenChange={setShowBustModal}>
         <DialogContent>
           <DialogHeader>

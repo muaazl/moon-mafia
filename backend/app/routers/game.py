@@ -25,7 +25,6 @@ _round_cache: dict[int, dict] = {}
 CLASSIC_MAX_ROUNDS = 10
 
 
-# ── Schemas ───────────────────────────────────────────────────────────────────
 class ActionType(str, Enum):
     HYPE = "HYPE"
     PURGE = "PURGE"
@@ -70,7 +69,6 @@ class AuditResponse(BaseModel):
     audit_cost: int
     capital: Optional[float] = None
 
-# ── Routes ────────────────────────────────────────────────────────────────────
 @router.get("/fetch", response_model=FetchResponse)
 async def fetch_round(
     mode: str = Query(default="classic", description="classic | unlimited"),
@@ -89,7 +87,6 @@ async def fetch_round(
     if difficulty not in DIFFICULTY_SECONDS:
         difficulty = "medium"
         
-    # Enforce stake limit rule (max 50% of available funds unless capital < 200 to not softlock completely broke players)
     max_allowed = max(100.0, float(user.capital) * 0.5)
     if stake > max_allowed:
         raise HTTPException(
@@ -99,7 +96,6 @@ async def fetch_round(
 
     data = await fetch_heart_image()  # ASSESSMENT: Interoperability — delegated to service.
 
-    # If this is a fresh session (or first ever round), reset streak
     if round_number == 1:
         user.current_streak = 0
         db.commit()
@@ -177,7 +173,6 @@ def perform_action(
     else:
         raise HTTPException(status_code=400, detail="Unknown action")
 
-    # Cache the stake so audit cost can reference it (stake doesn't change within a session)
     if user.id in _round_cache:
         _round_cache[user.id]["stake"] = body.stake
 
@@ -206,9 +201,7 @@ def perform_action(
         user.games_played = (user.games_played or 0) + 1
         user.current_streak = 0
         
-    # Scale multiplier for unlimited mode based on time
     if mode == "unlimited":
-        # Multiplier increases as timer decreases (round factor is tracked client-side)
         streak_multiplier = streak_multiplier * (1.1 + (round_number * 0.1))
 
     delta_capital = result["delta_capital"]

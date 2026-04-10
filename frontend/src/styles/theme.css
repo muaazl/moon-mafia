@@ -10,7 +10,7 @@
   --card-foreground: #f9fafb;
   --popover: #0b0f16;
   --popover-foreground: #f9fafb;
-  /* neutral UI; accents are explicit */
+
   --primary: #e5e7eb;
   --primary-foreground: #020617;
   --secondary: #111827;
@@ -19,7 +19,7 @@
   --muted-foreground: #9ca3af;
   --accent: #111827;
   --accent-foreground: #f9fafb;
-  /* main action colors are applied with utilities */
+
   --destructive: #ef4444;
   --destructive-foreground: #f9fafb;
   --border: #1f2933;
@@ -35,25 +35,25 @@
 .heart {
   --font-family: 'Sora', sans-serif;
   --background: #FDE4F2;
-  /* Very Light Pink */
+
   --foreground: #E23D80;
   --card: #FFFFFF;
-  /* White for heart card */
+
   --card-foreground: #E23D80;
   --popover: #FFFFFF;
   --popover-foreground: #E23D80;
   --primary: #FF69B4;
-  /* Deep Pink (Bullish) */
+
   --primary-foreground: #ffffff;
   --secondary: #FDE4F2;
-  /* Soft pink for secondary */
+
   --secondary-foreground: #E23D80;
   --muted: #FDE4F2;
   --muted-foreground: #FF69B4;
   --accent: #FF69B4;
   --accent-foreground: #ffffff;
   --destructive: #E23D80;
-  /* Dark Magenta (Bearish) */
+
   --destructive-foreground: #ffffff;
   --border: #FF69B4;
   --input: transparent;
@@ -160,7 +160,7 @@
     user-select: text;
   }
 
-  /* Money amounts that can be clicked to copy */
+
   .copyable {
     cursor: copy;
     transition: opacity 0.15s;
@@ -175,7 +175,7 @@
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='3.5' fill='none' stroke='%23ffffff' stroke-width='1.5'/%3E%3Cline x1='12' y1='1' x2='12' y2='7.5' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='12' y1='16.5' x2='12' y2='23' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='1' y1='12' x2='7.5' y2='12' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='16.5' y1='12' x2='23' y2='12' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") 12 12, crosshair;
   }
 
-  /* Sonner toast — always use readable light text in dark themes */
+
   :root [data-sonner-toaster] [data-sonner-toast] {
     color: #f9fafb !important;
     background: #0b0f16 !important;
@@ -190,7 +190,7 @@
     color: #9ca3af !important;
   }
 
-  /* Force pointer cursor on interactive elements */
+
   button,
   a,
   [role="button"],
@@ -198,10 +198,7 @@
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='3.5' fill='%23ffffff' stroke='%23ffffff' stroke-width='1.5'/%3E%3Cline x1='12' y1='1' x2='12' y2='7.5' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='12' y1='16.5' x2='12' y2='23' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='1' y1='12' x2='7.5' y2='12' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='16.5' y1='12' x2='23' y2='12' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") 12 12, pointer;
   }
 
-  /**
-  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
-  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
-  */
+
 
   html {
     font-size: var(--font-size);

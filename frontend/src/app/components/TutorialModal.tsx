@@ -6,7 +6,7 @@ import { Dialog, DialogContent } from "./ui/dotted-dialog";
 interface Slide {
   title: string;
   description: string;
-  image: string; // Placeholder for screenshots
+  image: string;
   instructions: string[];
 }
 
@@ -82,7 +82,6 @@ export function TutorialModal({ open, onClose, onFinish }: TutorialModalProps) {
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="max-w-4xl p-0 overflow-hidden bg-card/95 backdrop-blur-xl border-dashed">
         <div className="relative flex flex-col h-[500px]">
-          {/* Progress Bar */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-white/5 z-50">
             <motion.div
               className="h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
@@ -91,10 +90,7 @@ export function TutorialModal({ open, onClose, onFinish }: TutorialModalProps) {
               transition={{ duration: 0.3 }}
             />
           </div>
-
-          {/* Content Area */}
           <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-            {/* Image Placeholder */}
             <div className="flex-1 bg-black/40 relative overflow-hidden flex items-center justify-center border-b md:border-b-0 md:border-r border-dashed border-white/10">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -130,8 +126,6 @@ export function TutorialModal({ open, onClose, onFinish }: TutorialModalProps) {
 
               <div className="absolute inset-0 pointer-events-none" />
             </div>
-
-            {/* Text Area */}
             <div className="flex-1 p-8 flex flex-col">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -167,8 +161,6 @@ export function TutorialModal({ open, onClose, onFinish }: TutorialModalProps) {
                   </div>
                 </motion.div>
               </AnimatePresence>
-
-              {/* Navigation Controls */}
               <div className="flex items-center justify-between mt-auto pt-8">
                 <div className="flex gap-2">
                   <button

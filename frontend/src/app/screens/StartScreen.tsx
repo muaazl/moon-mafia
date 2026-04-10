@@ -46,7 +46,7 @@ export function StartScreen() {
       await api.patch("/auth/me", { has_seen_tutorial: true });
       await refreshUser();
     } catch (error) {
-      console.error("Failed to update tutorial status", error);
+      toast.error("Sync Error", { description: "Failed to update tutorial status." });
     }
   };
 
@@ -61,7 +61,6 @@ export function StartScreen() {
       return;
     }
 
-    // Max 50% capital check (enforced heavily if capital > 200)
     const maxAllowed = Math.max(100, (user?.capital || 0) * 0.5);
     if (parsedStake > maxAllowed) {
       toast.error("Stake Limit Exceeded", { description: `You cannot stake more than 50% of your funds ($${maxAllowed.toFixed(0)} max).` });
@@ -96,9 +95,6 @@ export function StartScreen() {
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 p-4 md:p-8 overflow-x-hidden">
-
-
-      {/* Top Bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -110,7 +106,6 @@ export function StartScreen() {
             try {
               await api.post(API_ROUTES.AUTH.LOGOUT);
             } catch (e) {
-              // Ignore logout error
             }
             clearUser();
             navigate("/");
@@ -122,7 +117,6 @@ export function StartScreen() {
         </button>
 
         <div className="relative flex flex-col items-end text-right min-w-[200px] group">
-          {/* Artistic Avatar Overlay - Half Visible/Half Hidden */}
           {user?.avatar_url && (
             <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full overflow-hidden opacity-20 grayscale pointer-events-none blur-[2px] transition-all duration-700">
               <img src={user.avatar_url} alt="" className="w-full h-full object-cover scale-110" />
@@ -148,11 +142,7 @@ export function StartScreen() {
           </div>
         </div>
       </motion.div>
-
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col lg:flex-row items-center justify-center max-w-7xl mx-auto w-full mt-4 md:mt-0 relative z-20 gap-8 h-full">
-
-        {/* Left Stats Section */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -198,15 +188,12 @@ export function StartScreen() {
             </div>
           </div>
         </motion.div>
-
-        {/* Action Configuration */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="show"
           className="flex-1 flex flex-col items-center justify-center w-full min-w-0"
         >
-          {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-10 md:mb-12 flex flex-col items-center">
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 glow-emerald">
               Moon Mafia
@@ -215,10 +202,7 @@ export function StartScreen() {
               Choose your game settings below before you start playing.
             </p>
           </motion.div>
-
-          {/* Selectors */}
           <div className="flex flex-col md:flex-row gap-6 md:gap-12 w-full justify-center mb-12 md:mb-16">
-            {/* Mode Selection */}
             <motion.div variants={itemVariants} className="flex-1 w-full md:max-w-xs">
               <h3 className="text-sm text-muted-foreground tracking-wider font-bold mb-4 ml-1">
                 Select Mode
@@ -245,8 +229,6 @@ export function StartScreen() {
                 ))}
               </div>
             </motion.div>
-
-            {/* Difficulty Selection */}
             <motion.div variants={itemVariants} className="flex-1 w-full md:max-w-xs">
               <h3 className="text-sm text-muted-foreground tracking-wider font-bold mb-4 ml-1">
                 Select Difficulty
@@ -282,8 +264,6 @@ export function StartScreen() {
               </div>
             </motion.div>
           </div>
-
-          {/* Actions */}
           <motion.div
             variants={itemVariants}
             className="flex flex-col items-center gap-4 md:gap-6 w-full md:max-w-sm"
@@ -336,8 +316,6 @@ export function StartScreen() {
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Stake Configuration Modal */}
       <Dialog open={showConfigModal} onOpenChange={setShowConfigModal}>
         <DialogContent>
           <DialogHeader>
@@ -372,7 +350,6 @@ export function StartScreen() {
                   <button
                     onClick={() => {
                         const half = Math.max(100, (user?.capital || 0) * 0.25);
-                        // Rounding down to nearest 10 as per "-1 or -10" suggestion
                         const rounded = Math.floor(half / 10) * 10;
                         setLockedStake(rounded.toString());
                     }}

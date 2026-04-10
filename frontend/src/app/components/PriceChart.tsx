@@ -2,13 +2,13 @@ import { useMemo, useRef, useEffect } from "react";
 import { useSettingsStore } from "../../store/useSettingsStore";
 
 interface PriceChartProps {
-  history?: number[];       // actual profit/loss values
+  history?: number[];
 }
 
-const Y_LABELS = 5;       // number of Y-axis ticks
-const X_PAD = 52;         // left padding for Y-axis labels
+const Y_LABELS = 5;
+const X_PAD = 52;
 const Y_PAD_TOP = 8;
-const Y_PAD_BOTTOM = 24;  // room for X labels if needed
+const Y_PAD_BOTTOM = 24;
 
 export function PriceChart({
   history = [],
@@ -16,7 +16,6 @@ export function PriceChart({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Derive Y-axis dollar labels from profit/loss history
   const yLabels = useMemo(() => {
     const data = history.length > 0 ? history : [0];
     const min = Math.min(0, ...data);
@@ -26,7 +25,6 @@ export function PriceChart({
     let lo = min - pad;
     let hi = max + pad;
     
-    // Ensure 0 is centered if min=0, max=0
     if (min === 0 && max === 0) { 
       lo = -500; hi = 500; 
     }
@@ -76,20 +74,17 @@ export function PriceChart({
     const yMin = yLabels[0];
     const yMax = yLabels[yLabels.length - 1];
 
-    // X-axis minimum representation of 10 rounds to prevent single points stretching full width
     const maxPts = Math.max(10, history.length - 1);
     
     const toCanvasX = (i: number) => plotX + (i / maxPts) * plotW;
     const toCanvasY = (val: number) => plotY + plotH - ((val - yMin) / (yMax - yMin)) * plotH;
 
-    // Draw Y grid lines & labels
     ctx.font = `bold 9px 'Space Grotesk', sans-serif`;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
 
     yLabels.forEach((val) => {
       const cy = toCanvasY(val);
-      // Grid line
       ctx.beginPath();
       ctx.strokeStyle = "rgba(148,163,184,0.12)";
       ctx.lineWidth = 1;
@@ -98,13 +93,11 @@ export function PriceChart({
       ctx.lineTo(W, cy);
       ctx.stroke();
       ctx.setLineDash([]);
-      // Label
       ctx.fillStyle = "rgba(156,163,175,0.8)";
       const label = val === 0 ? "$0" : `${val > 0 ? '+' : '-'}$${(Math.abs(val) / 1000).toFixed(1)}k`;
       ctx.fillText(label, X_PAD - 6, cy);
     });
 
-    // Breakeven (0) line
     const breakevenY = toCanvasY(0);
     ctx.beginPath();
     ctx.strokeStyle = "rgba(148,163,184,0.35)";
@@ -117,18 +110,15 @@ export function PriceChart({
 
     if (history.length === 0) return;
 
-    // Determine if trend is positive or negative
     const last = history[history.length - 1];
     const isPositive = last >= 0;
     const lineColor = isPositive ? "#34d399" : "#f87171";
 
-    // Build path points
     const pts = history.map((v, i) => ({
       x: toCanvasX(i),
       y: toCanvasY(v),
     }));
 
-    // Filled area
     const grad = ctx.createLinearGradient(0, plotY, 0, plotY + plotH);
     grad.addColorStop(0, isPositive ? "rgba(52,211,153,0.30)" : "rgba(248,113,113,0.25)");
     grad.addColorStop(1, "rgba(0,0,0,0)");
@@ -141,14 +131,12 @@ export function PriceChart({
       const cpx = (prev.x + curr.x) / 2;
       ctx.bezierCurveTo(cpx, prev.y, cpx, curr.y, curr.x, curr.y);
     }
-    // Connect to bottom
     ctx.lineTo(pts[pts.length - 1].x, plotY + plotH);
     ctx.lineTo(pts[0].x, plotY + plotH);
     ctx.closePath();
     ctx.fillStyle = grad;
     ctx.fill();
 
-    // Line
     ctx.beginPath();
     ctx.moveTo(pts[0].x, pts[0].y);
     for (let i = 1; i < pts.length; i++) {
@@ -162,13 +150,11 @@ export function PriceChart({
     ctx.lineJoin = "round";
     ctx.stroke();
 
-    // Endpoint dot
     const endPt = pts[pts.length - 1];
     ctx.beginPath();
     ctx.arc(endPt.x, endPt.y, 4, 0, Math.PI * 2);
     ctx.fillStyle = lineColor;
     ctx.fill();
-    // Outer glow ring
     ctx.beginPath();
     ctx.arc(endPt.x, endPt.y, 7, 0, Math.PI * 2);
     ctx.strokeStyle = lineColor;
@@ -177,19 +163,16 @@ export function PriceChart({
     ctx.stroke();
     ctx.globalAlpha = 1;
     
-    // Draw X-axis rounds
     ctx.font = `600 9px 'Space Grotesk', sans-serif`;
     ctx.fillStyle = "rgba(156,163,175,0.6)";
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    // Draw 0, mid, max round points
     ctx.fillText("0", toCanvasX(0), plotY + plotH + 8);
     const mid = Math.floor(maxPts / 2);
     ctx.fillText(mid.toString(), toCanvasX(mid), plotY + plotH + 8);
     ctx.fillText(maxPts.toString(), toCanvasX(maxPts), plotY + plotH + 8);
   };
 
-  // Redraw on history or container size change
   useEffect(() => {
     drawChart();
   }, [history, yLabels]);

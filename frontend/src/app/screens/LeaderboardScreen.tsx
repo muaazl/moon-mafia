@@ -31,7 +31,6 @@ export function LeaderboardScreen() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Tipping state
   const [tipRecipient, setTipRecipient] = useState<LeaderboardEntry | null>(null);
   const [tipAmount, setTipAmount] = useState<string>("");
   const [isTipping, setIsTipping] = useState(false);
@@ -42,8 +41,8 @@ export function LeaderboardScreen() {
       .then(res => {
         setLeaderboard(res.data);
       })
-      .catch((err) => {
-        console.error("Failed to load leaderboard:", err);
+      .catch((_err) => {
+        toast.error("Connection Error", { description: "Failed to load the associate rankings." });
       })
       .finally(() => {
         setLoading(false);
@@ -79,7 +78,6 @@ export function LeaderboardScreen() {
       setTipRecipient(null);
       setTipAmount("");
       
-      // Update local state and refresh user data
       await refreshUser();
       fetchLeaderboard();
     } catch (error: any) {
@@ -110,9 +108,6 @@ export function LeaderboardScreen() {
 
   return (
     <div className="h-screen w-full flex flex-col relative z-10 overflow-hidden">
-
-
-      {/* Top Bar - Consistent with MiniGame */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -137,7 +132,6 @@ export function LeaderboardScreen() {
         animate="show"
         className="flex-1 flex flex-col items-center w-full max-w-4xl mx-auto px-4 relative z-20 pb-8 min-h-0"
       >
-        {/* Header - Consistent with MiniGame */}
         <motion.div variants={itemVariants} className="text-center mb-6 md:mb-8 flex-shrink-0">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
             Leaderboard
@@ -146,8 +140,6 @@ export function LeaderboardScreen() {
             The World's Most Successful Associates.
           </p>
         </motion.div>
-
-        {/* Content */}
         <motion.div variants={itemVariants} className="w-full relative flex-1 min-h-0 flex flex-col">
           <div className="flex-1 flex flex-col rounded-3xl border border-white/[0.06] bg-black/40 overflow-hidden shadow-2xl relative">
             <div className="grid grid-cols-[3rem_minmax(0,1fr)_8rem_6rem] gap-4 p-4 border-b border-white/[0.06] bg-black/60 items-center text-xs font-bold text-muted-foreground flex-shrink-0">

@@ -8,9 +8,6 @@ export function CreditsScreen() {
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 p-4 md:p-8 overflow-hidden transition-colors duration-500">
-
-
-      {/* Top Bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -25,8 +22,6 @@ export function CreditsScreen() {
           Back
         </button>
       </motion.div>
-
-      {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center relative z-20">
           <motion.div
               key="profile"
@@ -35,7 +30,6 @@ export function CreditsScreen() {
               transition={{ duration: 1, ease: "easeOut" }}
               className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20 w-full max-w-5xl mx-auto px-4"
             >
-              {/* Photo */}
               <div className="flex justify-center shrink-0">
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-3xl scale-125" />
@@ -56,8 +50,6 @@ export function CreditsScreen() {
                   </div>
                 </div>
               </div>
-
-              {/* Details */}
               <div className="flex-1 text-center md:text-left">
                 <h1 className="text-5xl md:text-7xl font-black text-foreground tracking-tighter mb-4 glow-emerald">Muaaz</h1>
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-8">

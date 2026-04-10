@@ -7,12 +7,9 @@ export function FullscreenPromptModal() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Check if we already asked them this session
     const hasPrompted = sessionStorage.getItem("hasPromptedFullscreen");
     
-    // Only show if not in fullscreen and not prompted yet
     if (!hasPrompted && !document.fullscreenElement) {
-      // Small delay on page load before prompting
       const timer = setTimeout(() => setShow(true), 1000);
       return () => clearTimeout(timer);
     }
@@ -21,8 +18,7 @@ export function FullscreenPromptModal() {
   const handleEnable = () => {
     sessionStorage.setItem("hasPromptedFullscreen", "true");
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((err) => {
-        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      document.documentElement.requestFullscreen().catch((_err) => {
       });
     }
     setShow(false);
@@ -45,10 +41,7 @@ export function FullscreenPromptModal() {
           className="fixed inset-0 z-[9998] flex flex-col items-center justify-center pointer-events-auto"
           style={{ isolation: "isolate" }}
         >
-          {/* Blurred backdrop */}
           <div className="absolute inset-0 bg-background/80 backdrop-blur-md" />
-
-          {/* Modal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

@@ -19,10 +19,6 @@ from app.messages import COOLDOWN_MESSAGES, DEBT_MESSAGES, LOAN_MESSAGES
 
 router = APIRouter(prefix="/mini", tags=["mini-games"])
 
-# ── Burst Cooldown Config ─────────────────────────────────────────────────────
-# Each game allows BURST_LIMIT plays in quick succession.
-# Once the burst is exhausted, the player must wait COOLDOWN_SECONDS before playing again.
-# After the cooldown the burst counter resets.
 
 BURST_LIMIT: dict[str, int] = {
     "gamble": 3,
@@ -42,7 +38,6 @@ COOLDOWN_SECONDS: dict[str, int] = {
     "loan":   90,
 }
 
-# State: { user_id: { game: { count: int, window_start: float, cooldown_start: float | None } } }
 _bursts: dict[int, dict[str, dict]] = {}
 
 
@@ -60,21 +55,17 @@ def _check_cooldown(user_id: int, game: str) -> None:
     limit    = BURST_LIMIT[game]
     cd_secs  = COOLDOWN_SECONDS[game]
 
-    # If a cooldown is active, check whether it has expired
     if state["cooldown_start"] is not None:
         elapsed = now - state["cooldown_start"]
         remaining = cd_secs - elapsed
         if remaining > 0:
             msg = COOLDOWN_MESSAGES[game].format(s=int(remaining) + 1)
             raise HTTPException(status_code=429, detail=msg)
-        # Cooldown expired — reset burst
         state["count"] = 0
         state["cooldown_start"] = None
 
-    # Increment play count
     state["count"] += 1
 
-    # If burst is now exhausted, start a cooldown
     if state["count"] >= limit:
         state["cooldown_start"] = now
 
@@ -85,7 +76,6 @@ def _commit_delta(user: User, delta: float, db: Session) -> None:
     db.refresh(user)
 
 
-# ── Schemas ───────────────────────────────────────────────────────────────────
 class GambleRequest(BaseModel):
     amount: float
 
@@ -99,7 +89,6 @@ class MiniResponse(BaseModel):
     carrots: Optional[int] = None
 
 
-# ── Routes ────────────────────────────────────────────────────────────────────
 
 @router.post("/gamble", response_model=MiniResponse)
 async def mini_gamble(
@@ -233,7 +222,6 @@ async def mini_loan(
     )
 
 
-# ── Debt Interest Schema ──────────────────────────────────────────────────────
 
 class DebtTickResponse(BaseModel):
     capital: float
@@ -242,9 +230,9 @@ class DebtTickResponse(BaseModel):
     detail: str
 
 
-DEBT_BUST_FLOOR   = -5000.0   # if capital <= this, trigger repossession
-DEBT_RESET_AMOUNT =   100.0   # capital after repossession
-DEBT_RATE         =   0.05    # 5 % interest per tick
+DEBT_BUST_FLOOR   = -5000.0
+DEBT_RESET_AMOUNT =   100.0
+DEBT_RATE         =   0.05
 DEBT_MIN_CHARGE   =   10.0
 DEBT_MAX_CHARGE   =  500.0
 
@@ -267,9 +255,8 @@ async def mini_debt_tick(
             detail=DEBT_MESSAGES["NO_DEBT"],
         )
 
-    # Repossession check — already past the floor
     if user.capital <= DEBT_BUST_FLOOR:
-        delta = DEBT_RESET_AMOUNT - user.capital  # bring back up to 100
+        delta = DEBT_RESET_AMOUNT - user.capital
         user.capital = DEBT_RESET_AMOUNT
         db.commit()
         db.refresh(user)
@@ -280,7 +267,6 @@ async def mini_debt_tick(
             detail=DEBT_MESSAGES["REPOSSESSED"],
         )
 
-    # Interest on current debt
     debt = abs(user.capital)
     raw_interest = round(debt * DEBT_RATE, 2)
     interest = max(DEBT_MIN_CHARGE, min(raw_interest, DEBT_MAX_CHARGE))
@@ -289,7 +275,6 @@ async def mini_debt_tick(
     db.commit()
     db.refresh(user)
 
-    # Check if repossession floor was crossed after this tick
     bust = user.capital <= DEBT_BUST_FLOOR
     if bust:
         delta = DEBT_RESET_AMOUNT - user.capital
@@ -309,7 +294,6 @@ async def mini_debt_tick(
     )
 
 
-# ── Loan Payback ──────────────────────────────────────────────────────────────
 
 class PaybackLoanRequest(BaseModel):
     amount: float
@@ -344,7 +328,6 @@ async def payback_loan(
 
     _commit_delta(user, -repay, db)
 
-    # Clear the loan burst cooldown so they can take another one immediately if they paid back
     if user.id in _bursts and "loan" in _bursts[user.id]:
         del _bursts[user.id]["loan"]
 

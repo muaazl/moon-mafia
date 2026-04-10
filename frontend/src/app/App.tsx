@@ -16,7 +16,7 @@ function BackgroundMusic() {
   const { musicEnabled } = useSettingsStore();
   const pendingPlay = useRef(true);
   const fadeIntervalRef = useRef<any>(null);
-  const FADE_DURATION = 10000; // 10 seconds fade as requested
+  const FADE_DURATION = 10000;
   const TARGET_VOLUME = 0.5;
 
   const fade = (targetVolume: number, duration: number, onComplete?: () => void) => {
@@ -60,12 +60,11 @@ function BackgroundMusic() {
 
   useEffect(() => {
     const audio = new Audio('/music/bg.wav');
-    audio.loop = false; // Manual loop for fades
+    audio.loop = false;
     audio.volume = 0;
     audioRef.current = audio;
 
     const handleEnded = () => {
-      // Small delay before restarting
       setTimeout(() => {
         if (useSettingsStore.getState().musicEnabled) {
           startTrack();
@@ -75,11 +74,8 @@ function BackgroundMusic() {
 
     audio.addEventListener('ended', handleEnded);
 
-    // Monitoring track progress to start fade out
-    // If we want to fade out BEFORE it ends, we check currentTime
     const interval = setInterval(() => {
       if (audio.duration && audio.currentTime > audio.duration - (FADE_DURATION / 1000)) {
-        // Trigger fade out if not already fading
         if (!fadeIntervalRef.current && audio.volume === TARGET_VOLUME) {
           fade(0, FADE_DURATION);
         }
@@ -111,7 +107,6 @@ function BackgroundMusic() {
       window.removeEventListener('keydown', handleInteraction);
       window.removeEventListener('touchstart', handleInteraction);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -125,7 +120,6 @@ function BackgroundMusic() {
         audio.pause();
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [musicEnabled]);
 
   return null;

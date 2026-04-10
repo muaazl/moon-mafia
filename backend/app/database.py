@@ -33,18 +33,14 @@ def fix_postgres_sequences():
     Utility to synchronize PostgreSQL ID sequences with existing data.
     Prevents 'UniqueViolation' errors if IDs were manually inserted or migrated.
     """
-    # Only attempt if we're on PostgreSQL (Supabase uses postgres:// or postgresql://)
     if DATABASE_URL and ("postgresql" in DATABASE_URL or "postgres" in DATABASE_URL):
 
         try:
             with engine.connect() as connection:
-                # Reset the sequence for the 'users' table specifically
-                # pg_get_serial_sequence('users', 'id') automatically finds the sequence name
                 connection.execute(text(
                     "SELECT setval(pg_get_serial_sequence('users', 'id'), coalesce(max(id), 0) + 1, false) FROM users;"
                 ))
                 connection.commit()
                 print("Database sequences synchronized successfully.")
         except Exception as e:
-            # We don't want to crash startup if this fails (e.g. table doesn't exist yet)
             print(f"Warning: Failed to sync database sequences: {e}")

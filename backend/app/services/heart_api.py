@@ -11,7 +11,7 @@ DIFFICULTY_SECONDS = {
 }
 
 
-http_client: httpx.AsyncClient = None # type: ignore
+http_client: httpx.AsyncClient = None
 
 def init_http_client():
     global http_client

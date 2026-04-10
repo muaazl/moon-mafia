@@ -35,10 +35,7 @@ export function MobileBlockerOverlay() {
           className="fixed inset-0 z-[10000] flex flex-col items-center justify-center p-6 text-center"
           style={{ isolation: "isolate" }}
         >
-          {/* Blurred backdrop over whatever screen is below */}
           <div className="absolute inset-0 bg-background/95 backdrop-blur-2xl" />
-
-          {/* Animated background particles */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-50">
 
           </div>

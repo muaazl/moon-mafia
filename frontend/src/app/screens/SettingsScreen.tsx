@@ -21,7 +21,6 @@ export function SettingsScreen() {
   const [mounted, setMounted] = useState(false);
   const [view, setView] = useState<View>("settings");
 
-  // Edit Profile State
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [trait, setTrait] = useState<"male" | "female">("male");
@@ -30,7 +29,6 @@ export function SettingsScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  // Security State
   const [securityQuestion, setSecurityQuestion] = useState("");
   const [securityAnswer, setSecurityAnswer] = useState("");
   const [showAnswer, setShowAnswer] = useState(false);
@@ -157,9 +155,6 @@ export function SettingsScreen() {
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 p-4 md:p-6 overflow-x-hidden transition-colors duration-500">
-
-
-      {/* Top Bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -174,15 +169,12 @@ export function SettingsScreen() {
           {view !== "settings" ? "Back to Settings" : "Back"}
         </button>
       </motion.div>
-
-      {/* Main Content */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
         className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto w-full mt-4 md:mt-0 relative z-20"
       >
-        {/* Header */}
         <motion.div variants={itemVariants} className="text-center mb-10 md:mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 glow-emerald">
             {headerTitle}
@@ -192,8 +184,6 @@ export function SettingsScreen() {
 
         <motion.div variants={itemVariants} className="w-full max-w-4xl">
           <AnimatePresence mode="wait">
-
-            {/* ─── Settings List ─── */}
             {view === "settings" && (
               <motion.div
                 key="settings-view"
@@ -204,7 +194,6 @@ export function SettingsScreen() {
                 className="w-full bg-card/60 border border-border p-6 sm:p-8 rounded-[40px] shadow-sm relative z-10"
               >
                 <div className="space-y-2">
-                  {/* Theme */}
                   <div className="flex justify-between items-center py-4 px-4 hover:bg-muted/50 rounded-2xl transition-colors border-b border-border/50">
                     <div>
                       <span className="text-sm font-bold text-foreground block mb-1">Theme</span>
@@ -222,8 +211,6 @@ export function SettingsScreen() {
                       </div>
                     )}
                   </div>
-
-                  {/* Performance */}
                   <div className="flex justify-between items-center py-4 px-4 hover:bg-muted/50 rounded-2xl transition-colors border-b border-border/50">
                     <div>
                       <span className="text-sm font-bold text-foreground block mb-1">Performance</span>
@@ -241,8 +228,6 @@ export function SettingsScreen() {
                       </div>
                     )}
                   </div>
-
-                  {/* Edit Profile */}
                   <button
                     onClick={handleEnterProfile}
                     className="w-full flex justify-between items-center py-4 px-4 hover:bg-muted/50 rounded-2xl transition-colors border-b border-border/50 text-left"
@@ -253,8 +238,6 @@ export function SettingsScreen() {
                     </div>
                     <UserIcon size={18} className="text-muted-foreground" />
                   </button>
-
-                  {/* Security */}
                   <button
                     onClick={handleEnterSecurity}
                     className="w-full flex justify-between items-center py-4 px-4 hover:bg-muted/50 rounded-2xl transition-colors border-b border-border/50 text-left"
@@ -272,8 +255,6 @@ export function SettingsScreen() {
                       <ShieldCheck size={18} className="text-muted-foreground" />
                     </div>
                   </button>
-
-                  {/* Sound */}
                   <div className="flex justify-between items-center py-4 px-4 hover:bg-muted/50 rounded-2xl transition-colors border-b border-border/50">
                     <div>
                       <span className="text-sm font-bold text-foreground block mb-1">Sounds</span>
@@ -281,8 +262,6 @@ export function SettingsScreen() {
                     </div>
                     <SwitchBasic checked={soundEnabled} onCheckedChange={(e) => setSoundEnabled(e.checked)} />
                   </div>
-
-                  {/* Music */}
                   <div className="flex justify-between items-center py-4 px-4 hover:bg-muted/50 rounded-2xl transition-colors">
                     <div>
                       <span className="text-sm font-bold text-foreground block mb-1">Music</span>
@@ -293,8 +272,6 @@ export function SettingsScreen() {
                 </div>
               </motion.div>
             )}
-
-            {/* ─── Edit Profile Form ─── */}
             {view === "profile" && (
               <motion.div
                 key="profile-view"
@@ -305,7 +282,6 @@ export function SettingsScreen() {
                 className="w-full bg-card/60 backdrop-blur-3xl border border-border p-6 sm:p-8 rounded-[40px] shadow-sm relative z-10"
               >
                 <div className="space-y-6">
-                  {/* Name + Age */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-muted-foreground ml-1">Username</label>
@@ -328,8 +304,6 @@ export function SettingsScreen() {
                       />
                     </div>
                   </div>
-
-                  {/* Gender */}
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-muted-foreground ml-1">Gender</label>
                     <div className="flex gap-3">
@@ -347,8 +321,6 @@ export function SettingsScreen() {
                       </button>
                     </div>
                   </div>
-
-                  {/* Password */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-muted-foreground ml-1">New Password</label>
@@ -405,8 +377,6 @@ export function SettingsScreen() {
                       )}
                     </div>
                   </div>
-
-                  {/* Actions */}
                   <div className="pt-6 flex flex-col md:flex-row gap-4">
                     <button
                       onClick={handleSaveProfile}
@@ -438,8 +408,6 @@ export function SettingsScreen() {
                 </div>
               </motion.div>
             )}
-
-            {/* ─── Security Form ─── */}
             {view === "security" && (
               <motion.div
                 key="security-view"
@@ -450,15 +418,12 @@ export function SettingsScreen() {
                 className="w-full bg-card/60 backdrop-blur-3xl border border-border p-6 sm:p-8 rounded-[40px] shadow-sm relative z-10"
               >
                 <div className="space-y-6">
-                  {/* Info banner */}
                   <div className="rounded-2xl bg-emerald-500/5 border border-emerald-500/20 px-5 py-4">
                     <p className="text-xs font-bold text-emerald-400 mb-1">Why set a security question?</p>
                     <p className="text-xs text-muted-foreground leading-relaxed">
                       Your security question lets you recover your account if you forget your password. Keep the answer memorable but hard to guess.
                     </p>
                   </div>
-
-                  {/* Security Question */}
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-muted-foreground ml-1">Security Question</label>
                     <input
@@ -470,8 +435,6 @@ export function SettingsScreen() {
                       className="w-full bg-muted/40 border-none rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-emerald-500/50 transition-all"
                     />
                   </div>
-
-                  {/* Security Answer */}
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-muted-foreground ml-1">Security Answer</label>
                     <div className="relative">
@@ -493,8 +456,6 @@ export function SettingsScreen() {
                       </button>
                     </div>
                   </div>
-
-                  {/* Actions */}
                   <div className="pt-6 flex flex-col md:flex-row gap-4">
                     <button
                       onClick={handleSaveSecurity}

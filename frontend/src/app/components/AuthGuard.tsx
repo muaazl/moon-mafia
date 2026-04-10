@@ -17,7 +17,6 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (isInitialized && !isLoading && !user) {
-            // Not logged in, redirect to login unless already there
             if (location.pathname !== '/') {
                 navigate('/');
             }
@@ -45,10 +44,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         );
     }
 
-    // If we are at the login page and we ARE logged in, we shouldn't show it — redirect to start
     if (user && location.pathname === '/') {
-        // Actually, LoginScreen is not wrapped in AuthGuard in standard implementations
-        // but if it is, we redirect out. In routes.ts I shouldn't wrap LoginScreen.
     }
 
     return <>{children}</>;

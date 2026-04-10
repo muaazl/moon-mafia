@@ -8,7 +8,6 @@ export function AnimatedBackground() {
 
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-      {/* Background Grid - Always show in standard mode */}
       {!highQuality && (
         <div
           className="absolute inset-0 opacity-[0.05]"
@@ -18,8 +17,6 @@ export function AnimatedBackground() {
           }}
         />
       )}
-
-      {/* Animated Particles / High Quality MP4 */}
       <AnimatePresence mode="wait">
         {highQuality ? (
           <motion.div
@@ -50,8 +47,6 @@ export function AnimatedBackground() {
           null
         )}
       </AnimatePresence>
-
-      {/* Vignette Effect */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--background)_100%)] opacity-80 pointer-events-none" />
     </div>
   );

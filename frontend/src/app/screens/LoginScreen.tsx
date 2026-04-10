@@ -28,7 +28,6 @@ function LeftPanel() {
   const [tips, setTips] = useState([...TIPS]);
 
   useEffect(() => {
-    // Fetch an extra quote from our backend to add to the tips pool
     api.get<{ content: string; author: string }>(API_ROUTES.AUTH.QUOTE)
       .then(res => {
         if (res.data) {
@@ -252,8 +251,6 @@ export function LoginScreen() {
 
 
       <LeftPanel />
-
-      {/* Right Form Panel */}
       <div className="flex flex-1 items-center justify-center p-6 lg:p-12 relative z-10 lg:w-1/2">
         <motion.div
           initial={{ opacity: 0, x: 30 }}
