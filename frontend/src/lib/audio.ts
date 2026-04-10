@@ -2,7 +2,6 @@ import { useSettingsStore } from "../store/useSettingsStore";
 import { clickSound, hoverSound, betSound, winSound, loseSound, gameOverSound, miniWinSound, miniLoseSound } from "../utils/sound";
 
 export const playSound = (sound: "click" | "win" | "lose" | "hover" | "bet" | "gameover" | "miniwin" | "minilose") => {
-  // Use settings store to check if sound is enabled
   const { soundEnabled } = useSettingsStore.getState();
   if (!soundEnabled) return;
 
@@ -34,7 +33,6 @@ export const playSound = (sound: "click" | "win" | "lose" | "hover" | "bet" | "g
         break;
     }
   } catch (error) {
-    // ignore
   }
 };
 

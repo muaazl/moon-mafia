@@ -29,7 +29,6 @@ const store = create<SettingsState>()(
 
                 const initBatteryListener = async () => {
                     try {
-                        // @ts-ignore - Battery API might not be in types
                         const battery = await navigator.getBattery?.();
                         if (battery) {
                             const updateQuality = () => {
@@ -44,7 +43,6 @@ const store = create<SettingsState>()(
                             updateQuality();
                         }
                     } catch (e) {
-                        console.warn('Battery API not supported:', e);
                     }
                 };
 

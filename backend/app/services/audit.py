@@ -13,4 +13,4 @@ def _audit_cost(difficulty: str, stake: float = 200.0) -> int:
     minimums = {"easy": 50, "medium": 100, "hard": 150}
     rate = rates.get(difficulty, 0.60)
     minimum = minimums.get(difficulty, 100)
-    return max(minimum, int(stake * rate))
+    return max(minimum, int(stake * rate))

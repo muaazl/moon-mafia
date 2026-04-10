@@ -1,5 +1,6 @@
 # ASSESSMENT: Virtual Identity — Auth router handles registration, login, and JWT cookie issuance.
 # ASSESSMENT: Software Design (Low Coupling) — Auth logic isolated in its own router module.
+import os
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
@@ -16,8 +17,7 @@ from app.services import heart_api
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-# ── Config ────────────────────────────────────────────────────────────────────
-SECRET_KEY = "MOON_MAFIA_SECRET_CHANGE_IN_PROD"
+SECRET_KEY = os.getenv("SECRET_KEY", "MOON_MAFIA_SECRET_CHANGE_IN_PROD")
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_MINUTES = 120
 
@@ -30,7 +30,6 @@ def _verify_password(password: str, hashed: str) -> bool:
     return bcrypt.checkpw(password.encode(), hashed.encode())
 
 
-# ── Schemas ───────────────────────────────────────────────────────────────────
 class RegisterRequest(BaseModel):
     name: str
     age: int
@@ -73,7 +72,6 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
 def _create_token(user_id: int) -> str:
     """Build a signed JWT with an expiry claim."""
     expire = datetime.now(timezone.utc) + timedelta(minutes=TOKEN_EXPIRE_MINUTES)
@@ -99,7 +97,6 @@ def get_current_user(
     return user
 
 
-# ── Routes ────────────────────────────────────────────────────────────────────
 @router.post("/register", response_model=UserResponse)
 def register(body: RegisterRequest, db: Session = Depends(get_db)):
     """Create a new player account with full profile."""
@@ -253,17 +250,14 @@ async def get_random_quote():
 
     if not _QUOTES_CACHE:
         try:
-            # Reusing global http_client for connection pooling
             res = await heart_api.http_client.get("https://type.fit/api/quotes", timeout=5.0)
             if res.status_code == 200:
                 _QUOTES_CACHE = res.json()
         except Exception:
-            # Fallback will be used if cache is empty and fetch fails
             pass
 
     if _QUOTES_CACHE:
         q = random.choice(_QUOTES_CACHE)
-        # Handle cases where author might be null or contains 'type.fit' suffix
         raw_author = q.get("author") or "Unknown"
         author = raw_author.replace(", type.fit", "")
         if author == "type.fit":

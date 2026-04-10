@@ -22,7 +22,6 @@ export function NoInternetOverlay() {
 
   const handleRetry = async () => {
     setIsRetrying(true);
-    // Give the browser a brief moment to re-check connectivity
     await new Promise((r) => setTimeout(r, 800));
     if (navigator.onLine) {
       setIsOffline(false);
@@ -42,15 +41,10 @@ export function NoInternetOverlay() {
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
           style={{ isolation: "isolate" }}
         >
-          {/* Blurred backdrop over whatever screen is below */}
           <div className="absolute inset-0 bg-background/80 backdrop-blur-xl" />
-
-          {/* Animated background particles — consistent with other screens */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
 
           </div>
-
-          {/* Card */}
           <motion.div
             initial={{ opacity: 0, y: 32, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -58,15 +52,12 @@ export function NoInternetOverlay() {
             transition={{ duration: 0.45, ease: "easeOut", delay: 0.05 }}
             className="relative z-10 w-full max-w-md mx-4 bg-card/70 backdrop-blur-2xl border border-border rounded-[40px] p-10 shadow-2xl flex flex-col items-center text-center gap-6"
           >
-            {/* Pulsing icon */}
             <div className="relative flex items-center justify-center">
               <span className="absolute w-24 h-24 rounded-full bg-red-500/10 animate-ping" />
               <div className="w-20 h-20 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.15)]">
                 <WifiOff size={32} className="text-red-400" />
               </div>
             </div>
-
-            {/* Text */}
             <div className="space-y-2">
               <h1 className="text-3xl font-black text-foreground tracking-tight">
                 No Connection
@@ -76,14 +67,10 @@ export function NoInternetOverlay() {
                 sync your game data and verify sessions.
               </p>
             </div>
-
-            {/* Status indicator */}
             <div className="flex items-center gap-2 text-xs font-bold text-red-400">
               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
               Waiting for connection…
             </div>
-
-            {/* Retry button */}
             <button
               onClick={handleRetry}
               disabled={isRetrying}

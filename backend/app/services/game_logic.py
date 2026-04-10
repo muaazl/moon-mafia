@@ -5,7 +5,6 @@ import random
 from app.messages import GAME_OUTCOMES, LOAN_MESSAGES
 
 
-# ── Main Game Actions ─────────────────────────────────────────────────────────
 
 def _spread_payout(stake: float, hearts: int, carrots: int, is_win: bool = True) -> float:
     """
@@ -21,24 +20,15 @@ def _spread_payout(stake: float, hearts: int, carrots: int, is_win: bool = True)
 
     spread_ratio = abs(hearts - carrots) / total
     
-    # Volatility Index (±5% jitter)
     vix = 1.0 + random.uniform(-0.05, 0.05)
     
     if is_win:
-        # Difficulty Factor for rewards: Inverted spread
-        # Higher difficulty (smaller spread) = Higher payout
-        # Range: ~0.25 to ~1.25
         df = 1.25 - (spread_ratio * 1.0)
     else:
-        # Punishment Factor for losses: Normal spread (closer to 1.0 = more obvious mistake)
-        # Obvious mistake (larger spread) = Higher penalty
-        # Range: ~0.5 to ~1.5
         df = 0.5 + (spread_ratio * 1.0)
     
     raw = stake * df * vix
     
-    # Dynamic clamping to ensure fairness
-    # Max reward: 1.5x stake, Max loss: 1.5x stake
     clamped = max(stake * 0.20, min(raw, stake * 1.50))
     
     return round(clamped, 2)
@@ -147,16 +137,13 @@ def resolve_bet(stake: float, predicted_hearts: int, hearts: int,
     }
 
 
-# ── Mini-Game Actions ─────────────────────────────────────────────────────────
-# All mini-game payouts are capped to realistic amounts.
-# No beggar gets more than ~$100. No hunt returns more than ~$200.
 
-_BEG_MAX    = 80.0    # most you can get from begging
-_SEARCH_MAX = 120.0   # most you can scavenge
-_FISH_WIN   = 75.0    # max good catch
-_FISH_LOSS  = 30.0    # max bad-catch penalty
-_HUNT_WIN   = 200.0   # max trophy
-_HUNT_LOSS  = 60.0    # max failed-hunt penalty
+_BEG_MAX    = 80.0
+_SEARCH_MAX = 120.0
+_FISH_WIN   = 75.0
+_FISH_LOSS  = 30.0
+_HUNT_WIN   = 200.0
+_HUNT_LOSS  = 60.0
 
 
 def resolve_gamble(amount: float, hearts: int, carrots: int) -> dict:
@@ -172,7 +159,7 @@ def resolve_gamble(amount: float, hearts: int, carrots: int) -> dict:
         }
 
     if carrots == 0:
-        winnings = round(amount * 0.8, 2)   # solid win but not infinite
+        winnings = round(amount * 0.8, 2)
         return {
             "delta_capital": winnings,
             "outcome": "BIG_WIN",
@@ -208,7 +195,6 @@ def resolve_beg(hearts: int, no_reason: str) -> dict:
     Max reward: $80 (realistic for begging).
     """
     if random.random() < 0.5:
-        # Scale by hearts but cap hard
         raw    = hearts * random.uniform(3, 12)
         reward = round(min(raw, _BEG_MAX), 2)
         return {

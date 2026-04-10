@@ -1,7 +1,4 @@
-/**
- * Procedural Sound System using Web Audio API
- * Enhanced for more "fun" arcade-style feedback
- */
+
 
 let audioCtx: AudioContext | null = null;
 let isInteracted = false;
@@ -28,7 +25,6 @@ const getAudioContext = () => {
     try {
       audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
     } catch (e) {
-      console.warn('AudioContext not supported', e);
       return null;
     }
   }
@@ -55,9 +51,7 @@ const createOscillator = (freq: number, type: OscillatorType = 'sine', gainVal: 
   return { osc, gain, ctx };
 };
 
-/**
- * Click sound: Percussive double-tap
- */
+
 export const clickSound = () => {
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -80,9 +74,7 @@ export const clickSound = () => {
   }
 };
 
-/**
- * Hover sound: Tiny playful blip
- */
+
 export const hoverSound = () => {
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -96,9 +88,7 @@ export const hoverSound = () => {
   }
 };
 
-/**
- * Bet sound: Quick rising "whoop"
- */
+
 export const betSound = () => {
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -121,14 +111,12 @@ export const betSound = () => {
   osc.stop(now + 0.15);
 };
 
-/**
- * Win sound: Rapid minor-to-major arpeggio
- */
+
 export const winSound = () => {
   const ctx = getAudioContext();
   if (!ctx) return;
   const now = ctx.currentTime;
-  const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+  const notes = [523.25, 659.25, 783.99, 1046.50];
   
   notes.forEach((freq, i) => {
     const sound = createOscillator(freq, 'sine', 0.1);
@@ -143,9 +131,7 @@ export const winSound = () => {
   });
 };
 
-/**
- * Mini-win sound: Snappy double-blip
- */
+
 export const miniWinSound = () => {
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -163,9 +149,7 @@ export const miniWinSound = () => {
   });
 };
 
-/**
- * Lose sound: Gritty descending slide
- */
+
 export const loseSound = () => {
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -190,9 +174,7 @@ export const loseSound = () => {
   osc.stop(now + 0.3);
 };
 
-/**
- * Mini-lose sound: Short sad tritone
- */
+
 export const miniLoseSound = () => {
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -210,14 +192,12 @@ export const miniLoseSound = () => {
   });
 };
 
-/**
- * Game Over sound: 4-note descending motif
- */
+
 export const gameOverSound = () => {
   const ctx = getAudioContext();
   if (!ctx) return;
   const now = ctx.currentTime;
-  const notes = [392.00, 349.23, 311.13, 261.63]; // G4, F4, Eb4, C4
+  const notes = [392.00, 349.23, 311.13, 261.63];
   
   notes.forEach((freq, i) => {
     const sound = createOscillator(freq, 'triangle', 0.15);

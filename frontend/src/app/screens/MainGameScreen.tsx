@@ -85,26 +85,22 @@ export function MainGameScreen() {
   const gameSettings = location.state || { difficulty: "medium", mode: "classic", stake: 100 };
   const lockedStake = gameSettings.stake || 100;
 
-  // Game state
   const [capital, setCapital] = useState(0);
   const [round, setRound] = useState(1);
   const [streak, setStreak] = useState(0);
   const { user } = useAuthStore();
   const [timer, setTimer] = useState(30);
   const [isDataVisible, setIsDataVisible] = useState(false);
-  const [activeStake, setActiveStake] = useState(lockedStake); // dynamic stake scaling
+  const [activeStake, setActiveStake] = useState(lockedStake);
   const [isImageFaded, setIsImageFaded] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Chart history: stores net profit values per round starting at 0
   const [history, setHistory] = useState<number[]>([0]);
 
-  // Difficulty & Unlimited Multipliers
   const isUnlimited = gameSettings.mode === "unlimited";
   const fadeDuration = gameSettings.difficulty === "hard" ? 0.1 : gameSettings.difficulty === "medium" ? 2 : 5;
 
-  // Round Result State — no more volatility, show actual revealed values
   const [lastRoundResult, setLastRoundResult] = useState<{
     gainLoss: number;
     hearts: number;
@@ -112,15 +108,12 @@ export function MainGameScreen() {
     show: boolean;
   } | null>(null);
 
-  // Ref to block the auto-fade useEffect while audit reveal is active
   const auditRevealActive = useRef(false);
 
-  // Aggregated session totals — these persist across rounds
   const [totalGains, setTotalGains] = useState(0);
   const [totalLosses, setTotalLosses] = useState(0);
   const netProfit = totalGains - totalLosses;
 
-  // Modal / drawer states
   const [actionType, setActionType] = useState<"HYPE" | "PURGE" | "BET" | null>(null);
   const [sessionStartCapital, setSessionStartCapital] = useState(0);
   const [showAuditModal, setShowAuditModal] = useState(false);
@@ -128,7 +121,6 @@ export function MainGameScreen() {
   const [showGameOverModal, setShowGameOverModal] = useState(false);
   const [showLeaveTableModal, setShowLeaveTableModal] = useState(false);
 
-  // Action state
   const [predictedHearts, setPredictedHearts] = useState("");
   const [predictedCarrots, setPredictedCarrots] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -143,7 +135,6 @@ export function MainGameScreen() {
         `${API_ROUTES.GAME.FETCH}?mode=${gameSettings.mode}&difficulty=${gameSettings.difficulty}&stake=${lockedStake}&round_number=${currentRound}`
       );
 
-      // Preload image
       const img = new Image();
       img.src = data.image_url;
       img.onload = () => {
@@ -159,7 +150,6 @@ export function MainGameScreen() {
         setSessionStartCapital(data.capital);
       }
       
-      // Dynamic stake scaling check
       const maxAllowed = Math.max(100.0, data.capital * 0.5);
       if (activeStake > maxAllowed) {
         setActiveStake(maxAllowed);
@@ -175,10 +165,8 @@ export function MainGameScreen() {
 
   useEffect(() => {
     fetchGame(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Image fade mechanism — skip if audit is actively revealing
   useEffect(() => {
     if (isDataVisible && imageLoaded && !isImageFaded && !auditRevealActive.current) {
       const timeout = setTimeout(() => {
@@ -188,7 +176,6 @@ export function MainGameScreen() {
     }
   }, [isDataVisible, imageLoaded, isImageFaded, imageUrl]);
 
-  // Timer countdown
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -236,7 +223,6 @@ export function MainGameScreen() {
       setCapital(data.capital);
       setStreak(data.streak || 0);
 
-      // Store actual profit value in history for the chart
       setHistory(prev => [...prev, gainLoss]);
 
       if (gainLoss > 0) setTotalGains((prev) => prev + gainLoss);
@@ -270,14 +256,12 @@ export function MainGameScreen() {
         if (isWin) fireWinConfetti();
         setTimeout(() => setShowGameOverModal(true), 1000);
       } else {
-        // Trigger confetti for high-value wins or jackpots
         if (data.outcome === "JACKPOT") {
           fireJackpotConfetti();
         } else if (gainLoss > activeStake * 1.5) {
           fireWinConfetti();
         }
 
-        // Streak thresholds
         if (data.streak === 5 || data.streak === 10 || data.streak === 20) {
           fireStreakConfetti();
         }
@@ -293,7 +277,6 @@ export function MainGameScreen() {
     }
   };
 
-  // Open hint modal — compute preview cost from stake & difficulty
   const openAuditModal = () => {
     const rates: Record<string, number> = { easy: 0.50, medium: 0.60, hard: 0.75 };
     const minimums: Record<string, number> = { easy: 50, medium: 100, hard: 150 };
@@ -311,7 +294,6 @@ export function MainGameScreen() {
         const { data } = await api.get<AuditResponse>(API_ROUTES.GAME.AUDIT);
         if (data.capital !== undefined) setCapital(data.capital);
 
-        // Block auto-fade, then reveal the image for a difficulty-scaled duration
         const revealMs = gameSettings.difficulty === "hard" ? 500 : gameSettings.difficulty === "medium" ? 2000 : 3000;
         const revealLabel = gameSettings.difficulty === "hard" ? "0.5 seconds" : gameSettings.difficulty === "medium" ? "2 seconds" : "3 seconds";
         auditRevealActive.current = true;
@@ -350,7 +332,7 @@ export function MainGameScreen() {
         });
         playSound("lose");
       } catch (error: any) {
-        console.error("Forfeit failed", error);
+        toast.error("Operation Failed", { description: "Forfeit process encountered an error." });
       }
     } else {
       playSound("gameover");
@@ -497,7 +479,6 @@ export function MainGameScreen() {
               </div>
 
               <div className="space-y-4">
-                  {/* This round P&L — big */}
                   <div className="flex items-end gap-3">
                     <div>
                       <div className="text-xs font-bold text-muted-foreground opacity-50 mb-0.5">This Round</div>
@@ -513,11 +494,7 @@ export function MainGameScreen() {
                       )}
                     </div>
                   </div>
-
-                  {/* Divider */}
                   <div className="border-t border-border/40" />
-
-                  {/* Session totals + revealed counts */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="rounded-xl bg-emerald-500/5 border border-emerald-500/20 px-3 py-2">
                       <div className="text-xs tracking-wider text-muted-foreground opacity-60">Total Won</div>
@@ -732,7 +709,6 @@ export function MainGameScreen() {
       >
         <DialogContent className="max-w-6xl overflow-hidden bg-background/80 backdrop-blur-2xl border-border/50" hideCloseIcon>
           <div className="grid h-full max-h-[85vh] gap-10 md:grid-cols-2 p-6 md:p-10">
-            {/* Left: Chart Section */}
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-1">
                 <h2 className={`text-4xl font-black tracking-tighter ${isWin ? "text-emerald-400 glow-emerald" : "text-red-400"}`}>
@@ -747,8 +723,6 @@ export function MainGameScreen() {
                 <PriceChart history={history} />
               </div>
             </div>
-
-            {/* Right: Stats Section */}
             <div className="flex flex-col justify-between py-2">
               <div className="space-y-8">
                 <div>

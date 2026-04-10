@@ -16,8 +16,7 @@ export function FullScreenButton() {
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((err) => {
-        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      document.documentElement.requestFullscreen().catch((_err) => {
       });
     } else {
       if (document.exitFullscreen) {

@@ -8,7 +8,7 @@ class User(Base):  # ASSESSMENT: Virtual Identity — User entity for auth & gam
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    name = Column(String, unique=True, nullable=False, index=True)  # codename / login username
+    name = Column(String, unique=True, nullable=False, index=True)
     age = Column(Integer, nullable=False)
     gender = Column(String, nullable=False)
     password_hash = Column(String, nullable=False)
@@ -23,5 +23,5 @@ class User(Base):  # ASSESSMENT: Virtual Identity — User entity for auth & gam
     carrot_mode_wins = Column(Integer, default=0)
     security_question = Column(String, nullable=True)
     security_answer = Column(String, nullable=True)
-    has_seen_tutorial = Column(Integer, default=0)  # 0 for False, 1 for True
+    has_seen_tutorial = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

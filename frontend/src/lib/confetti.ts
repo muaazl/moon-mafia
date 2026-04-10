@@ -1,8 +1,6 @@
 import confetti from 'canvas-confetti';
 
-/**
- * Gold and emerald explosion for JACKPOT
- */
+
 export function fireJackpotConfetti() {
   const duration = 2 * 1000;
   const animationEnd = Date.now() + duration;
@@ -20,7 +18,6 @@ export function fireJackpotConfetti() {
     }
 
     const particleCount = 50 * (timeLeft / duration);
-    // golden + green particles
     confetti({
       ...defaults,
       particleCount,
@@ -36,9 +33,7 @@ export function fireJackpotConfetti() {
   }, 250);
 }
 
-/**
- * Emerald burst for standard wins
- */
+
 export function fireWinConfetti() {
   confetti({
     particleCount: 100,
@@ -49,9 +44,7 @@ export function fireWinConfetti() {
   });
 }
 
-/**
- * Side cannons for streaks or milestone events
- */
+
 export function fireStreakConfetti() {
   const end = Date.now() + 2 * 1000;
   const colors = ['#10b981', '#fbbf24'];

@@ -7,10 +7,6 @@ import { ArrowLeftIcon } from "lucide-react";
 export function HowToPlayScreen() {
   const navigate = useNavigate();
 
-  // const videos = [
-  //   { title: "THE MARKET", description: "Watch the feed closely. Hearts and Carrots appear briefly before fading.", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZxbDV4Mnh5Ynh4MHZ4eG54Z3B4eHhyeHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxxS0Z7mY5W/giphy.gif" },
-  //   { title: "THE SPREAD", description: "Smaller differences between counts mean higher payouts, but higher risk.", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZxbDV4Mnh5Ynh4MHZ4eG54Z3B4eHhyeHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lUjf8kY6U8m8m8/giphy.gif" },
-  // ];
 
   const actions = [
     { title: "HYPE", desc: "Wager that Hearts outnumber Carrots. Payouts scale with the market's volatility." },
@@ -41,9 +37,6 @@ export function HowToPlayScreen() {
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 p-4 md:p-8 overflow-x-hidden transition-colors duration-500">
-
-
-      {/* Top Bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -58,15 +51,12 @@ export function HowToPlayScreen() {
           Back
         </button>
       </motion.div>
-
-      {/* Main Content */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
         className="flex-1 flex flex-col items-center justify-center max-w-6xl mx-auto w-full mt-4 md:mt-0 relative z-20"
       >
-        {/* Header */}
         <motion.div variants={itemVariants} className="text-center mb-10 md:mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 glow-emerald">
             How to Play
@@ -75,34 +65,7 @@ export function HowToPlayScreen() {
             Learn the rules of the game before you start playing!
           </p>
         </motion.div>
-
-        {/* Video Demos
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mb-12">
-          {videos.map((vid) => (
-            <div
-              key={vid.title}
-              className="bg-card/40 backdrop-blur-3xl border border-border/50 rounded-3xl overflow-hidden group hover:border-emerald-500/40 transition-all duration-500 shadow-xl"
-            >
-              <div className="aspect-video bg-background relative overflow-hidden">
-                <img src={vid.url} alt={vid.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 backdrop-blur-md border border-emerald-500/40 flex items-center justify-center">
-                    <span className="text-emerald-400 text-sm ml-1">▶</span>
-                  </div>
-                </div>
-              </div>
-              <div className="p-5">
-                <h3 className="text-xs font-black text-emerald-400 tracking-widest mb-1">{vid.title}</h3>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-relaxed">{vid.description}</p>
-              </div>
-            </div>
-          ))}
-        </motion.div> */}
-
-        {/* Mechanics Grid */}
         <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mb-16">
-          {/* Actions */}
           <div className="space-y-6">
             <h2 className="text-base font-bold text-emerald-400 mb-6 flex items-center gap-3">
               <span className="h-4 w-1 bg-emerald-500 rounded-full" /> Actions
@@ -116,8 +79,6 @@ export function HowToPlayScreen() {
               ))}
             </div>
           </div>
-
-          {/* Mini Games */}
           <div className="space-y-6">
             <h2 className="text-base font-bold text-emerald-400 mb-6 flex items-center gap-3">
               <span className="h-4 w-1 bg-emerald-500 rounded-full" /> Side Hustles
@@ -131,8 +92,6 @@ export function HowToPlayScreen() {
               ))}
             </div>
           </div>
-
-          {/* Rules */}
           <div className="bg-card/40 rounded-3xl p-6 border border-border/50 shadow-sm flex flex-col">
             <h2 className="text-base font-bold text-emerald-400 mb-6 flex items-center gap-3">
               <span className="h-4 w-1 bg-emerald-500 rounded-full" /> Operational Rules

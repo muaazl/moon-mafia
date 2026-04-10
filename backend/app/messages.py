@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-# COOLDOWN MESSAGES
 COOLDOWN_MESSAGES = {
     "gamble": "High-roller on timeout. Dice are cooling off. Try again in {s}s.",
     "beg":    "Begging again so soon? Even pity has a cooldown. {s}s to go.",
@@ -10,7 +9,6 @@ COOLDOWN_MESSAGES = {
     "loan":   "Your loan broker needs a breather. Come back in {s}s.",
 }
 
-# DEBT & LOAN
 DEBT_MESSAGES = {
     "NO_DEBT": "No debt. All good.",
     "REPOSSESSED": "You've been repossessed. Assets seized. Reset to $100.",
@@ -29,7 +27,6 @@ LOAN_MESSAGES = {
     "INVALID_AMOUNT": "Repayment amount must be positive.",
 }
 
-# GAME OUTCOMES (Resolvers)
 GAME_OUTCOMES = {
     "DRAW": {
         "HYPE": "⚖️  Hearts({hearts}) = Carrots({carrots}). The market is perfectly balanced — no gains, no losses.",
@@ -65,7 +62,6 @@ GAME_OUTCOMES = {
     }
 }
 
-# AUDIT
 AUDIT_MESSAGES = {
     "SUCCESS": "Vision restored for 3 seconds! Cost: ${cost}.",
     "NO_ROUND": "No active round to audit. Call /game/fetch first.",
