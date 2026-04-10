@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, memo } from "react";
 import { ArrowLeftIcon } from "lucide-react";
 import { useNavigate, useLocation } from "react-router";
 import { Button } from "../components/ui/button";
@@ -38,7 +38,8 @@ const copyToClipboard = (value: number) => {
   });
 };
 
-const AnimatedCounter = ({ value, prefix = "", duration = 1, force = false }: { value: number; prefix?: string; duration?: number; force?: boolean }) => {
+// BOLT OPTIMIZATION: Memoize AnimatedCounter to prevent constant re-renders during timer ticks.
+const AnimatedCounter = memo(({ value, prefix = "", duration = 1, force = false }: { value: number; prefix?: string; duration?: number; force?: boolean }) => {
   const { highQuality } = useSettingsStore();
   const [displayValue, setDisplayValue] = useState(value);
   const prevValue = useRef(value);
@@ -77,7 +78,7 @@ const AnimatedCounter = ({ value, prefix = "", duration = 1, force = false }: { 
   }, [value, duration, highQuality]);
 
   return <span>{prefix}{formatNumber(displayValue)}</span>;
-};
+});
 
 export function MainGameScreen() {
   const navigate = useNavigate();

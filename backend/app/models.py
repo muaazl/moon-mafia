@@ -12,7 +12,7 @@ class User(Base):  # ASSESSMENT: Virtual Identity — User entity for auth & gam
     age = Column(Integer, nullable=False)
     gender = Column(String, nullable=False)
     password_hash = Column(String, nullable=False)
-    capital = Column(Float, default=1000.0)
+    capital = Column(Float, default=1000.0, index=True)
     avatar_url = Column(String, nullable=True)
     games_played = Column(Integer, default=0)
     total_wins = Column(Integer, default=0)
