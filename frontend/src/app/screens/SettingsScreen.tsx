@@ -28,6 +28,7 @@ export function SettingsScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [securityQuestion, setSecurityQuestion] = useState("");
   const [securityAnswer, setSecurityAnswer] = useState("");
@@ -111,16 +112,16 @@ export function SettingsScreen() {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm("Are you sure you want to burn this identity? All progress will be lost.")) return;
     setIsSaving(true);
     try {
       await api.delete(API_ROUTES.AUTH.ME);
       clearUser();
-      toast.success("Identity Burned", { description: "You are a ghost." });
+      toast.success("Account Deleted", { description: "Your account has been successfully deleted." });
       navigate("/");
     } catch (error: any) {
       toast.error("Deletion Failed", { description: error.response?.data?.detail || "Could not delete account." });
       setIsSaving(false);
+      setShowDeleteModal(false);
     }
   };
 
@@ -397,7 +398,7 @@ export function SettingsScreen() {
                     </button>
 
                     <button
-                      onClick={handleDeleteAccount}
+                      onClick={() => setShowDeleteModal(true)}
                       disabled={isSaving}
                       className="px-6 bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold py-4 rounded-2xl text-sm transition-all flex items-center justify-center gap-2 border border-red-500/20 hover:border-red-500/40"
                     >
@@ -482,6 +483,52 @@ export function SettingsScreen() {
           </AnimatePresence>
         </motion.div>
       </motion.div>
+
+      <AnimatePresence>
+        {showDeleteModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+              onClick={() => !isSaving && setShowDeleteModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative bg-card border border-border p-6 rounded-3xl shadow-xl max-w-sm w-full z-10"
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+                  <Trash2 className="text-red-500" size={32} />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-3">Delete Account</h3>
+                <p className="text-sm text-muted-foreground font-medium mb-8">
+                  Are you sure you want to delete your account? You will lose access to your profile.
+                </p>
+                <div className="flex flex-col sm:flex-row w-full gap-3">
+                  <button
+                    onClick={() => setShowDeleteModal(false)}
+                    disabled={isSaving}
+                    className="flex-1 px-4 py-4 bg-muted/40 hover:bg-muted/60 text-foreground font-bold rounded-2xl text-sm transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleDeleteAccount}
+                    disabled={isSaving}
+                    className="flex-1 px-4 py-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-2xl text-sm transition-all shadow-[0_0_15px_rgba(239,68,68,0.3)] flex justify-center items-center gap-2"
+                  >
+                    {isSaving ? "Deleting..." : "Yes, Delete"}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

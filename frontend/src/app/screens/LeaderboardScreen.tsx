@@ -152,7 +152,7 @@ export function LeaderboardScreen() {
             <div className="flex-1 overflow-y-auto w-full no-scrollbar select-none focus:outline-none">
               {loading ? (
                 <div className="flex justify-center items-center h-full min-h-[40vh]">
-                  <span className="text-sm font-bold text-emerald-400 animate-pulse">Fetching Data...</span>
+                  <span className="text-sm font-bold text-emerald-400 animate-pulse">Loading...</span>
                 </div>
               ) : leaderboard.length === 0 ? (
                 <div className="flex justify-center items-center h-full min-h-[40vh] opacity-50">

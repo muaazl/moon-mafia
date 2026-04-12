@@ -59,7 +59,7 @@ function BackgroundMusic() {
   };
 
   useEffect(() => {
-    const audio = new Audio('/music/bg.wav');
+    const audio = new Audio('/music/bg.mp3');
     audio.loop = false;
     audio.volume = 0;
     audioRef.current = audio;

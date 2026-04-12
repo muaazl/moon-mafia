@@ -14,7 +14,7 @@ const TUTORIAL_SLIDES: Slide[] = [
   {
     title: "THE MARKET",
     description: "Welcome to the Moon Mafia. The market is volatile and fast.",
-    image: "/tutorials/market.png",
+    image: "/tutorials/market.webp",
     instructions: [
       "Watch the feed closely.",
       "Hearts and Carrots appear briefly before fading.",
@@ -24,7 +24,7 @@ const TUTORIAL_SLIDES: Slide[] = [
   {
     title: "THE SPREAD",
     description: "Volatility means opportunity. High risk, high reward.",
-    image: "/tutorials/spread.png",
+    image: "/tutorials/spread.webp",
     instructions: [
       "Smaller differences between counts mean higher payouts.",
       "The spread determines your risk level.",
@@ -34,7 +34,7 @@ const TUTORIAL_SLIDES: Slide[] = [
   {
     title: "ACTIONS: HYPE & PURGE",
     description: "Choose your side. Are you feeling bullish or bearish?",
-    image: "/tutorials/actions.png",
+    image: "/tutorials/actions.webp",
     instructions: [
       "HYPE: Wager that Hearts outnumber Carrots.",
       "PURGE: Wager that Carrots outnumber Hearts.",
@@ -44,7 +44,7 @@ const TUTORIAL_SLIDES: Slide[] = [
   {
     title: "SIDE HUSTLES",
     description: "Gamble, Hunt, Fish. Diversify your capital sources.",
-    image: "/tutorials/side-hustles.png",
+    image: "/tutorials/side-hustles.webp",
     instructions: [
       "GAMBLE: High-stakes ratio betting.",
       "HUNT & FISH: Go off-grid to earn capital.",
