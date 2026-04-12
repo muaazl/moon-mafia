@@ -15,4 +15,25 @@ export default defineConfig({
   },
 
   assetsInclude: ['**/*.svg', '**/*.csv'],
+
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-charts': ['recharts'],
+          'vendor-ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-switch',
+            '@radix-ui/react-radio-group',
+            '@radix-ui/react-label',
+            '@radix-ui/react-slot',
+            'vaul',
+            'sonner',
+          ],
+        },
+      },
+    },
+  },
 })
