@@ -1,10 +1,13 @@
+import { memo } from "react";
+
 interface HUDCardProps {
   label: string;
   value: string | number;
   align?: "left" | "center" | "right";
 }
 
-export function HUDCard({ label, value, align = "left" }: HUDCardProps) {
+// BOLT OPTIMIZATION: Memoize HUD components to prevent re-renders on every game tick (timer).
+export const HUDCard = memo(function HUDCard({ label, value, align = "left" }: HUDCardProps) {
   const alignStyles = {
     left: "text-left",
     center: "text-center",
@@ -19,4 +22,4 @@ export function HUDCard({ label, value, align = "left" }: HUDCardProps) {
       <div className="text-lg font-semibold text-foreground">{value}</div>
     </div>
   );
-}
+});

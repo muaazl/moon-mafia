@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect } from "react";
+import { useMemo, useRef, useEffect, memo } from "react";
 import { useSettingsStore } from "../../store/useSettingsStore";
 
 interface PriceChartProps {
@@ -10,7 +10,8 @@ const X_PAD = 52;
 const Y_PAD_TOP = 8;
 const Y_PAD_BOTTOM = 24;
 
-export function PriceChart({
+// BOLT OPTIMIZATION: Memoize PriceChart to prevent expensive canvas redraws on every game tick.
+export const PriceChart = memo(function PriceChart({
   history = [],
 }: PriceChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -190,4 +191,4 @@ export function PriceChart({
       <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   );
-}
+});

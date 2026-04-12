@@ -7,7 +7,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, load_only
 from sqlalchemy import desc
 
 from app.database import get_db
@@ -364,7 +364,14 @@ def tip_player(
 @router.get("/leaderboard", response_model=list[LeaderboardEntry])
 def get_leaderboard(db: Session = Depends(get_db)):
     """Fetch the top 50 players sorted by capital for the leaderboard."""
-    top_users = db.query(User).order_by(desc(User.capital)).limit(50).all()
+    # PERFORMANCE: Only fetch essential fields to reduce payload and DB pressure.
+    top_users = (
+        db.query(User)
+        .options(load_only(User.name, User.avatar_url, User.capital))
+        .order_by(desc(User.capital))
+        .limit(50)
+        .all()
+    )
     return [
         LeaderboardEntry(
             name=user.name,
