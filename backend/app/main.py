@@ -11,7 +11,7 @@ from app.services import heart_api
 Base.metadata.create_all(bind=engine)
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI):  # ASSESSMENT: Event-Driven Programming — Lifespan events handle startup/shutdown tasks.
     fix_postgres_sequences()
     
     heart_api.init_http_client()
@@ -41,5 +41,5 @@ app.include_router(mini.router)   # ASSESSMENT: Software Design — mini-game co
 
 
 @app.get("/")
-def root():
+def root():  # ASSESSMENT: Interoperability — Simple health check endpoint for external monitoring.
     return {"status": "Moon Mafia API Online"}

@@ -38,6 +38,7 @@ const copyToClipboard = (value: number) => {
   });
 };
 
+// ASSESSMENT: Software Design (High Cohesion) — Reusable counter component with local animation logic.
 // BOLT OPTIMIZATION: Memoize AnimatedCounter to prevent constant re-renders during timer ticks.
 const AnimatedCounter = memo(({ value, prefix = "", duration = 1, force = false }: { value: number; prefix?: string; duration?: number; force?: boolean }) => {
   const { highQuality } = useSettingsStore();
@@ -126,7 +127,7 @@ export function MainGameScreen() {
   const [predictedCarrots, setPredictedCarrots] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fetchGame = useCallback(async (currentRound: number) => {
+  const fetchGame = useCallback(async (currentRound: number) => { // ASSESSMENT: Interoperability — Client-server communication via REST API.
     try {
       setIsDataVisible(false);
       setTimer(0);
@@ -138,7 +139,7 @@ export function MainGameScreen() {
 
       const img = new Image();
       img.src = data.image_url;
-      img.onload = () => {
+      img.onload = () => { // ASSESSMENT: Event-Driven Programming — Image load event triggers game timer and visibility.
         setImageUrl(data.image_url);
         setImageLoaded(true);
         setIsDataVisible(true);
@@ -177,7 +178,7 @@ export function MainGameScreen() {
     }
   }, [isDataVisible, imageLoaded, isImageFaded, imageUrl]);
 
-  useEffect(() => {
+  useEffect(() => { // ASSESSMENT: Event-Driven Programming — Timer expiration event fades image and restricts actions.
     if (timer > 0) {
       const interval = setInterval(() => {
         setTimer((prev) => {
@@ -533,7 +534,7 @@ export function MainGameScreen() {
 
             <div className="rounded-3xl border border-border bg-card/80 px-6 py-5">
               <div className="grid grid-cols-3 gap-4">
-                <Button
+                <Button // ASSESSMENT: Event-Driven Programming — Button click dispatches HYPE game action.
                   disabled={!isDataVisible || isSubmitting}
                   className="h-14 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-sm font-bold tracking-wider text-white shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all"
                   onClick={() => executeAction("HYPE")}

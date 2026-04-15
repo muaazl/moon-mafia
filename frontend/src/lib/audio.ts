@@ -1,6 +1,7 @@
 import { useSettingsStore } from "../store/useSettingsStore";
 import { clickSound, hoverSound, betSound, winSound, loseSound, gameOverSound, miniWinSound, miniLoseSound } from "../utils/sound";
 
+// ASSESSMENT: Software Design (High Cohesion) — Encapsulated audio logic for the application.
 export const playSound = (sound: "click" | "win" | "lose" | "hover" | "bet" | "gameover" | "miniwin" | "minilose") => {
   const { soundEnabled } = useSettingsStore.getState();
   if (!soundEnabled) return;
