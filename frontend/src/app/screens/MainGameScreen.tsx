@@ -39,7 +39,6 @@ const copyToClipboard = (value: number) => {
 };
 
 // ASSESSMENT: Software Design (High Cohesion) — Reusable counter component with local animation logic.
-// BOLT OPTIMIZATION: Memoize AnimatedCounter to prevent constant re-renders during timer ticks.
 const AnimatedCounter = memo(({ value, prefix = "", duration = 1, force = false }: { value: number; prefix?: string; duration?: number; force?: boolean }) => {
   const { highQuality } = useSettingsStore();
   const [displayValue, setDisplayValue] = useState(value);
