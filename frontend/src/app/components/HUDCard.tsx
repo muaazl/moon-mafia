@@ -6,7 +6,6 @@ interface HUDCardProps {
   align?: "left" | "center" | "right";
 }
 
-// BOLT OPTIMIZATION: Memoize HUD components to prevent re-renders on every game tick (timer).
 export const HUDCard = memo(function HUDCard({ label, value, align = "left" }: HUDCardProps) {
   const alignStyles = {
     left: "text-left",

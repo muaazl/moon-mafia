@@ -10,7 +10,6 @@ const X_PAD = 52;
 const Y_PAD_TOP = 8;
 const Y_PAD_BOTTOM = 24;
 
-// BOLT OPTIMIZATION: Memoize PriceChart to prevent expensive canvas redraws on every game tick.
 export const PriceChart = memo(function PriceChart({
   history = [],
 }: PriceChartProps) {
