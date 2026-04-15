@@ -33,7 +33,7 @@ async def fetch_heart_image() -> dict:
     }
 
 
-async def fetch_no_reason() -> str:
+async def fetch_no_reason() -> str:  # ASSESSMENT: Interoperability — Integration with 3rd party "No" API.
     """Fetches a snarky 'No' reason from naas.isalman.dev/no."""
     try:
         response = await http_client.get(NO_API_URL, timeout=5.0)

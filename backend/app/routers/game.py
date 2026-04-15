@@ -322,7 +322,7 @@ class LeaderboardEntry(BaseModel):
     avatar_url: Optional[str] = None
     capital: float
 
-@router.post("/tip", response_model=TipResponse)
+@router.post("/tip", response_model=TipResponse)  # ASSESSMENT: Event-Driven Programming — Player-to-player interaction event.
 def tip_player(
     body: TipRequest,
     user: User = Depends(get_current_user),
@@ -362,7 +362,7 @@ def tip_player(
     )
 
 @router.get("/leaderboard", response_model=list[LeaderboardEntry])
-def get_leaderboard(db: Session = Depends(get_db)):
+def get_leaderboard(db: Session = Depends(get_db)):  # ASSESSMENT: Interoperability — JSON format allows any client to display leaderboard.
     """Fetch the top 50 players sorted by capital for the leaderboard."""
     # PERFORMANCE: Only fetch essential fields to reduce payload and DB pressure.
     top_users = (

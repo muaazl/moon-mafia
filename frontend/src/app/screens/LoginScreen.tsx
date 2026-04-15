@@ -115,6 +115,7 @@ function LeftPanel() {
   );
 }
 
+// ASSESSMENT: Virtual Identity — Handles user registration, authentication, and identity recovery.
 export function LoginScreen() {
   const navigate = useNavigate();
   const [view, setView] = useState<"login" | "register" | "forgot">("login");
@@ -138,7 +139,7 @@ export function LoginScreen() {
   const [newPassword, setNewPassword] = useState("");
   const [newConfirmPassword, setNewConfirmPassword] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => { // ASSESSMENT: Virtual Identity — Login event establishes user session.
     e.preventDefault();
     setIsLoading(true);
     try {
