@@ -55,7 +55,7 @@ Mini-games have hard-capped rewards to keep the economy stable.
 | **Search** | 60% | $120.00 | $0.00 | Scavenging for scraps. |
 | **Fish** | 70% | $75.00 | $30.00 | Patient gain or bad catch. |
 | **Hunt** | 45% | $200.00 | $60.00 | High risk, high reward. |
-| **Loan** | 100% | $500.00 | N/A | Instant cash ($100 - $500). |
+| **Loan** | 100% | $500.00 | Have to pay back 2x | Instant cash ($100 - $500). |
 
 ---
 
@@ -69,16 +69,3 @@ Winning multiple rounds in a row grants a bonus to your earnings:
 ### Unlimited Mode Scaling
 In Unlimited mode, a time-based multiplier is applied to increase the stakes as the game progresses:
 `Scale = (1.1 + (Round Number * 0.1))`
-
----
-
-## 5. Debt & Repossession
-
-If your capital falls below **$0.00**, you are in debt.
-
-- **Interest**: Every 30 seconds, **5% interest** is charged on your total debt.
-  - Minimum charge: $10.00
-  - Maximum charge: $500.00
-- **Repossession**: If your capital hits **-$5,000.00**, the Mafia repossesses your assets.
-  - Your capital is reset to **$100.00**.
-  - You lose all previous progress.

@@ -34,7 +34,7 @@ export function CreditsScreen() {
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-3xl scale-125" />
                   <img
-                    src="/photo/me.jpeg"
+                    src="/photo/me.webp"
                     alt="Developer"
                     className="relative w-48 h-48 md:w-72 md:h-72 rounded-full object-cover border-4 border-emerald-500/30 shadow-2xl shadow-emerald-500/20"
                     onError={(e) => {

@@ -363,7 +363,6 @@ def tip_player(
 @router.get("/leaderboard", response_model=list[LeaderboardEntry])
 def get_leaderboard(db: Session = Depends(get_db)):  # ASSESSMENT: "Interoperability - This endpoint outputs standard JSON data so any client device can easily retrieve and display the rankings."
     """Fetch the top 50 players sorted by capital for the leaderboard."""
-    # PERFORMANCE: Only fetch essential fields to reduce payload and DB pressure.
     top_users = (
         db.query(User)
         .options(load_only(User.name, User.avatar_url, User.capital))
