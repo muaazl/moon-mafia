@@ -41,11 +41,6 @@
 | **DiceBear Avatars** | Generates unique bot-style avatars based on usernames. | `backend/app/routers/auth.py` | Service |
 | **Google Fonts** | Provides the "Sora" font family for the application UI. | `frontend/index.html` | Service |
 
-## Hosting and Infrastructure References
-The project contains configuration and references for:
-- **Vercel**: Intended platform for frontend deployment.
-- **Render**: Intended platform for backend deployment.
-
 ## Development Notes
 - **AI Assistance**: This project utilizes specific `ASSESSMENT:` comments throughout the codebase to highlight architectural decisions such as Software Design (Low Coupling/High Cohesion), Interoperability, Event-driven Programming, and Virtual Identity. These patterns and the Bolt performance persona were integrated to demonstrate engineering best practices.
 - **Integration**: The final implementation was carefully reviewed, adjusted, and integrated by me to ensure a cohesive and functional application.

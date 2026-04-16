@@ -19,7 +19,6 @@ from app.messages import COOLDOWN_MESSAGES, DEBT_MESSAGES, LOAN_MESSAGES
 
 router = APIRouter(prefix="/mini", tags=["mini-games"])
 
-
 BURST_LIMIT: dict[str, int] = {
     "gamble": 3,
     "beg":    2,
@@ -89,7 +88,6 @@ class MiniResponse(BaseModel):
     carrots: Optional[int] = None
 
 
-
 @router.post("/gamble", response_model=MiniResponse)
 async def mini_gamble(
     body: GambleRequest,
@@ -121,7 +119,7 @@ async def mini_beg(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Beg for money — 50/50 chance. On rejection, hear a snarky 'No'."""
+    """Beg for money — 50/50 chance. On rejection, hear a 'No'."""
     _check_cooldown(user.id, "beg")
 
     data = await fetch_heart_image()

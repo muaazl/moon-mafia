@@ -1,4 +1,3 @@
-# ASSESSMENT: Event-Driven Programming — Game actions dispatched by action type from client events.
 # ASSESSMENT: Software Design (Low Coupling) — Router delegates to service functions, no inline math.
 from __future__ import annotations
 
@@ -94,7 +93,7 @@ async def fetch_round(
             detail=f"Stake cannot exceed 50% of available funds (${round(max_allowed, 2)} max)"
         )
 
-    data = await fetch_heart_image()  # ASSESSMENT: Interoperability — delegated to service.
+    data = await fetch_heart_image()
 
     if round_number == 1:
         user.current_streak = 0

@@ -280,7 +280,7 @@ export function SettingsScreen() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="w-full bg-card/60 backdrop-blur-3xl border border-border p-6 sm:p-8 rounded-[40px] shadow-sm relative z-10"
+                className="w-full bg-card/60 border border-border p-6 sm:p-8 rounded-[40px] shadow-sm relative z-10"
               >
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -416,7 +416,7 @@ export function SettingsScreen() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="w-full bg-card/60 backdrop-blur-3xl border border-border p-6 sm:p-8 rounded-[40px] shadow-sm relative z-10"
+                className="w-full bg-card/60 border border-border p-6 sm:p-8 rounded-[40px] shadow-sm relative z-10"
               >
                 <div className="space-y-6">
                   <div className="rounded-2xl bg-emerald-500/5 border border-emerald-500/20 px-5 py-4">

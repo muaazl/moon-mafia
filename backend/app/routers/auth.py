@@ -17,7 +17,7 @@ from app.services import heart_api
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-SECRET_KEY = os.getenv("SECRET_KEY", "MOON_MAFIA_SECRET_CHANGE_IN_PROD")
+SECRET_KEY = os.getenv("SECRET_KEY", "MOON_MAFIA_SECRET")
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_MINUTES = 120
 

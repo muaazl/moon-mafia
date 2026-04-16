@@ -1,10 +1,9 @@
-# ASSESSMENT: Software Design (High Cohesion) — All persistence models in one module.
 from sqlalchemy import Column, Integer, String, Float, DateTime
 from app.database import Base
 import datetime
 
 
-class User(Base):  # ASSESSMENT: Virtual Identity — User entity for auth & game state.
+class User(Base):  # ASSESSMENT: Virtual Identity - User entity for auth & game state.
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)

@@ -11,7 +11,7 @@ from app.services import heart_api
 Base.metadata.create_all(bind=engine)
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):  # ASSESSMENT: Event-Driven Programming — Lifespan events handle startup/shutdown tasks.
+async def lifespan(app: FastAPI):
     fix_postgres_sequences()
     
     heart_api.init_http_client()

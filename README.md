@@ -2,7 +2,7 @@
 
 Welcome to **Moon Mafia**, a high-stakes betting game where your eyes are your best asset! Predict the count of hearts and carrots in images to grow your capital and climb the leaderboard.
 
-## 🎮 How it Works
+## How it Works
 
 The core of the game is simple:
 1. **Get Started**: Every new player starts with **$1,000**.
@@ -12,7 +12,7 @@ The core of the game is simple:
    - **Unlimited Mode**: Keep playing as long as you can handle the pressure!
 4. **Mini-Games**: If you're short on cash or just feeling lucky, try mini-games like Begging, Fishing, or Hunting to boost your balance.
 
-## 🚀 Key Features
+## Key Features
 
 - **Hype & Purge**: Bet on whether there are more Hearts (Hype) or more Carrots (Purge).
 - **Precision Betting**: Guess the exact number of hearts or carrots for massive multipliers.
@@ -21,12 +21,12 @@ The core of the game is simple:
 - **Mini-Games**: A variety of ways to earn (or lose) money outside the main game.
 - **Debt System**: Be careful! If your capital goes negative, interest will accumulate.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: Python with [FastAPI](https://fastapi.tiangolo.com/), SQLAlchemy, and SQLite/PostgreSQL.
 - **Frontend**: React with [Vite](https://vitejs.dev/), Tailwind CSS, and Framer Motion.
 
-## 🏃 Getting Started
+## Getting Started
 
 ### Backend Setup
 1. Navigate to `backend/`.
@@ -38,7 +38,7 @@ The core of the game is simple:
 2. Install dependencies: `pnpm install`.
 3. Start dev server: `pnpm dev`.
 
-## 📚 References and Acknowledgements
+## References and Acknowledgements
 This project utilizes several external libraries, APIs, and services to deliver a rich gaming experience. For a detailed list of all third-party tools and acknowledgements, please refer to the [REFERENCES.md](./REFERENCES.md) file.
 
 ---
