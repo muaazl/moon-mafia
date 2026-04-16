@@ -1,5 +1,5 @@
-# ASSESSMENT: Software Design (High Cohesion) — Pure game math, no I/O or framework imports.
-# ASSESSMENT: Event-Driven Programming — Each resolve_* function is a pure handler for a player action.
+# ASSESSMENT: "Software Design - This file computes game mathematics without relying on web connections to maintain high cohesion."
+
 from __future__ import annotations
 import random
 from app.messages import GAME_OUTCOMES, LOAN_MESSAGES

@@ -1,5 +1,5 @@
-# ASSESSMENT: Software Design (Low Coupling) — Mini-game logic isolated from main game router.
-# ASSESSMENT: Event-Driven Programming — Each endpoint is triggered by a distinct player action type.
+
+
 from __future__ import annotations
 import time
 from typing import Optional

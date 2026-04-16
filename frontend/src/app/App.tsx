@@ -11,7 +11,7 @@ import { NoInternetOverlay } from '../components/NoInternetOverlay';
 import { MobileBlockerOverlay } from '../components/MobileBlockerOverlay';
 import { FullscreenPromptModal } from '../components/FullscreenPromptModal';
 import { AnimatedBackground } from './components/AnimatedBackground';
-function BackgroundMusic() { // ASSESSMENT: Event-Driven Programming — Audio start triggered by first user interaction.
+function BackgroundMusic() { // ASSESSMENT: "Event-Driven Programming - The background music waits for a user interaction event to begin playback due to browser security limits."
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { musicEnabled } = useSettingsStore();
   const pendingPlay = useRef(true);
@@ -125,7 +125,7 @@ function BackgroundMusic() { // ASSESSMENT: Event-Driven Programming — Audio s
   return null;
 }
 
-function GlobalAudioHaptics() { // ASSESSMENT: Event-Driven Programming — Global event listeners for UI sounds and haptics.
+function GlobalAudioHaptics() {
   const lastHoveredRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -198,7 +198,7 @@ function ZoomPreventer() {
   return null;
 }
 
-// ASSESSMENT: Software Design (High Cohesion) — App entry point composing global providers and layouts.
+
 export default function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="carrot" themes={['carrot', 'heart']}>

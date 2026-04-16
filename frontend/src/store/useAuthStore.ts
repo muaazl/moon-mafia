@@ -11,14 +11,14 @@ interface AuthState {
     refreshUser: () => Promise<void>;
 }
 
-// ASSESSMENT: Virtual Identity — Centralized store managing user session state.
+
 export const useAuthStore = create<AuthState>((set) => ({
     user: null,
     isLoading: true,
     isInitialized: false,
     setUser: (user) => set({ user, isInitialized: true, isLoading: false }),
     clearUser: () => set({ user: null, isInitialized: true, isLoading: false }),
-    refreshUser: async () => { // ASSESSMENT: Interoperability — Syncing local state with backend user data.
+    refreshUser: async () => {
         set({ isLoading: true });
         try {
             const { data } = await api.get<UserResponse>('/auth/me');

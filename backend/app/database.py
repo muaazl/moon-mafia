@@ -1,4 +1,4 @@
-# ASSESSMENT: Software Design (Low Coupling) — Database layer is fully decoupled from routes and models.
+
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base

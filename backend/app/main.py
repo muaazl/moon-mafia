@@ -1,4 +1,4 @@
-# ASSESSMENT: Software Design (Low Coupling) — main.py only composes routers; no business logic here.
+# ASSESSMENT: "Software Design - This file only routes network requests without handling game rules to maintain low coupling."
 import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
@@ -30,16 +30,16 @@ else:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,  # ASSESSMENT: Virtual Identity — credentials required for cookie auth.
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)   # ASSESSMENT: Software Design — auth concerns isolated.
-app.include_router(game.router)   # ASSESSMENT: Software Design — main game concerns isolated.
-app.include_router(mini.router)   # ASSESSMENT: Software Design — mini-game concerns isolated.
+app.include_router(auth.router)
+app.include_router(game.router)
+app.include_router(mini.router)
 
 
 @app.get("/")
-def root():  # ASSESSMENT: Interoperability — Simple health check endpoint for external monitoring.
+def root():
     return {"status": "Moon Mafia API Online"}

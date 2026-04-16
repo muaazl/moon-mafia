@@ -1,4 +1,4 @@
-# ASSESSMENT: Interoperability — External API calls isolated in service modules.
+# ASSESSMENT: "Interoperability - This module isolates all external API connections so our system can communicate easily with third-party services."
 import httpx
 import random
 
@@ -33,7 +33,7 @@ async def fetch_heart_image() -> dict:
     }
 
 
-async def fetch_no_reason() -> str:  # ASSESSMENT: Interoperability — Integration with 3rd party "No" API.
+async def fetch_no_reason() -> str:
     """Fetches a snarky 'No' reason from naas.isalman.dev/no."""
     try:
         response = await http_client.get(NO_API_URL, timeout=5.0)

@@ -1,5 +1,5 @@
-# ASSESSMENT: Virtual Identity — Auth router handles registration, login, and JWT cookie issuance.
-# ASSESSMENT: Software Design (Low Coupling) — Auth logic isolated in its own router module.
+
+
 import os
 from datetime import datetime, timedelta, timezone
 
@@ -119,14 +119,14 @@ def register(body: RegisterRequest, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=UserResponse)
 def login(body: LoginRequest, response: Response, db: Session = Depends(get_db)):
-    """Authenticate and set a HttpOnly JWT cookie."""  # ASSESSMENT: Virtual Identity — HttpOnly cookie auth.
+    """Authenticate and set a HttpOnly JWT cookie."""
     user = db.query(User).filter(User.name == body.username).first()
     if not user or not _verify_password(body.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = _create_token(user.id)
 
-    response.set_cookie(  # ASSESSMENT: Virtual Identity — JWT stored in HttpOnly cookie.
+    response.set_cookie(  # ASSESSMENT: "Virtual Identity - The system stores the session token in an HTTP-only cookie to protect the user's digital identity from script theft."
         key="session_token",
         value=token,
         httponly=True,

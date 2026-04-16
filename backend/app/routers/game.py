@@ -1,4 +1,4 @@
-# ASSESSMENT: Software Design (Low Coupling) — Router delegates to service functions, no inline math.
+
 from __future__ import annotations
 
 from enum import Enum
@@ -135,7 +135,7 @@ def perform_action(
     carrots = game_data["carrots"]
     mode = game_data["mode"]
 
-    if body.action == ActionType.HYPE:  # ASSESSMENT: Event-Driven Programming — dispatched from client action.
+    if body.action == ActionType.HYPE:
         if body.stake <= 0:
             raise HTTPException(status_code=400, detail="Invalid stake amount")
             
@@ -321,7 +321,7 @@ class LeaderboardEntry(BaseModel):
     avatar_url: Optional[str] = None
     capital: float
 
-@router.post("/tip", response_model=TipResponse)  # ASSESSMENT: Event-Driven Programming — Player-to-player interaction event.
+@router.post("/tip", response_model=TipResponse)  # ASSESSMENT: "Event-Driven Programming - Tipping triggers an immediate server event to securely update the account balances of both interacting players."
 def tip_player(
     body: TipRequest,
     user: User = Depends(get_current_user),
@@ -361,7 +361,7 @@ def tip_player(
     )
 
 @router.get("/leaderboard", response_model=list[LeaderboardEntry])
-def get_leaderboard(db: Session = Depends(get_db)):  # ASSESSMENT: Interoperability — JSON format allows any client to display leaderboard.
+def get_leaderboard(db: Session = Depends(get_db)):  # ASSESSMENT: "Interoperability - This endpoint outputs standard JSON data so any client device can easily retrieve and display the rankings."
     """Fetch the top 50 players sorted by capital for the leaderboard."""
     # PERFORMANCE: Only fetch essential fields to reduce payload and DB pressure.
     top_users = (

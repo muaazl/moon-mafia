@@ -115,7 +115,7 @@ function LeftPanel() {
   );
 }
 
-// ASSESSMENT: Virtual Identity — Handles user registration, authentication, and identity recovery.
+// ASSESSMENT: "Virtual Identity - The security question flow provides a safe method for players to prove their identity and recover their accounts."
 export function LoginScreen() {
   const navigate = useNavigate();
   const [view, setView] = useState<"login" | "register" | "forgot">("login");
@@ -139,7 +139,7 @@ export function LoginScreen() {
   const [newPassword, setNewPassword] = useState("");
   const [newConfirmPassword, setNewConfirmPassword] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => { // ASSESSMENT: Virtual Identity — Login event establishes user session.
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {

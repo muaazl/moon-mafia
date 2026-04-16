@@ -38,7 +38,7 @@ const copyToClipboard = (value: number) => {
   });
 };
 
-// ASSESSMENT: Software Design (High Cohesion) — Reusable counter component with local animation logic.
+// ASSESSMENT: "Software Design - This counter component manages its own animation to maintain high cohesion and keep the parent screen clean."
 const AnimatedCounter = memo(({ value, prefix = "", duration = 1, force = false }: { value: number; prefix?: string; duration?: number; force?: boolean }) => {
   const { highQuality } = useSettingsStore();
   const [displayValue, setDisplayValue] = useState(value);
@@ -126,7 +126,7 @@ export function MainGameScreen() {
   const [predictedCarrots, setPredictedCarrots] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fetchGame = useCallback(async (currentRound: number) => { // ASSESSMENT: Interoperability — Client-server communication via REST API.
+  const fetchGame = useCallback(async (currentRound: number) => {
     try {
       setIsDataVisible(false);
       setTimer(0);
@@ -138,7 +138,7 @@ export function MainGameScreen() {
 
       const img = new Image();
       img.src = data.image_url;
-      img.onload = () => { // ASSESSMENT: Event-Driven Programming — Image load event triggers game timer and visibility.
+      img.onload = () => { // ASSESSMENT: "Event-Driven Programming - The game timer starts only after an image load event to ensure a fair experience for all players."
         setImageUrl(data.image_url);
         setImageLoaded(true);
         setIsDataVisible(true);
@@ -177,7 +177,7 @@ export function MainGameScreen() {
     }
   }, [isDataVisible, imageLoaded, isImageFaded, imageUrl]);
 
-  useEffect(() => { // ASSESSMENT: Event-Driven Programming — Timer expiration event fades image and restricts actions.
+  useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
         setTimer((prev) => {
@@ -533,7 +533,7 @@ export function MainGameScreen() {
 
             <div className="rounded-3xl border border-border bg-card/80 px-6 py-5">
               <div className="grid grid-cols-3 gap-4">
-                <Button // ASSESSMENT: Event-Driven Programming — Button click dispatches HYPE game action.
+                <Button
                   disabled={!isDataVisible || isSubmitting}
                   className="h-14 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-sm font-bold tracking-wider text-white shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-all"
                   onClick={() => executeAction("HYPE")}

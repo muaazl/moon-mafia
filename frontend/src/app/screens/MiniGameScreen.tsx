@@ -110,7 +110,7 @@ export function MiniGameScreen() {
 
   const SUSPENSE_DELAY_MS = 1500;
 
-  const handlePlay = async () => { // ASSESSMENT: Event-Driven Programming — Mini-game actions triggered by player clicks.
+  const handlePlay = async () => {
     if (selectedGame === "gamble") {
       const amount = parseFloat(betAmount);
       if (!amount || amount <= 0) {
@@ -125,7 +125,7 @@ export function MiniGameScreen() {
     const prevCapital = user?.capital ?? 0;
 
     try {
-      let response; // ASSESSMENT: Interoperability — Communicating with backend mini-game endpoints.
+      let response;
       if (selectedGame === "gamble") {
         response = await api.post<MiniResponse>(API_ROUTES.MINI.GAMBLE, { amount: parseFloat(betAmount) });
       } else {

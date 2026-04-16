@@ -1,4 +1,4 @@
-# ASSESSMENT: Software Design (High Cohesion) — Audit cost calculation logic.
+
 
 def _audit_cost(difficulty: str, stake: float = 200.0) -> int:
     """
